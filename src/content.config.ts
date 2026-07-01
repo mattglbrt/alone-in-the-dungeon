@@ -19,7 +19,7 @@ const posts = defineCollection({
         updated: z.coerce.date().optional(),
 
         // Primary content classification
-        type: z.enum(['live-play', 'review', 'stories', 'hobby', 'guides']),
+        type: z.enum(['live-play', 'review', 'stories', 'hobby', 'guides', 'news']),
         format: z
           .enum(['video', 'text', 'image-gallery', 'text-with-images'])
           .default('text'),
