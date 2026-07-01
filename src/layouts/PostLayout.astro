@@ -25,6 +25,12 @@ const { data } = post;
 const typeLabel = TYPE_LABELS[data.type];
 const typePath = typeBasePath(data.type);
 
+const ogImage = data.heroImage
+  ? data.heroImage.src
+  : data.youtubeId
+    ? `https://img.youtube.com/vi/${data.youtubeId}/maxresdefault.jpg`
+    : undefined;
+
 // Fetch series entry for breadcrumb + metadata
 const seriesEntry = data.series
   ? (await getCollection('series')).find((s) => s.id === data.series)
@@ -58,6 +64,7 @@ const breadcrumbData = {
   title={data.title}
   description={data.description}
   ogType="article"
+  image={ogImage}
   structuredData={[structuredData, breadcrumbData]}
 >
 
@@ -118,6 +125,46 @@ const breadcrumbData = {
 
       <OrnamentalDivider class="mx-auto mt-10 w-44 text-violet-500" />
     </header>
+
+    {(data.bookAuthor || data.bookYear || data.readingFormat) && (
+      <div class="mx-auto max-w-[var(--container-prose)] px-6 mb-10">
+        <dl class="rounded border border-void-700 bg-void-900/50 grid grid-cols-2 gap-x-6 gap-y-3 px-6 py-5 font-sans text-sm sm:grid-cols-3">
+          {data.bookAuthor && (
+            <>
+              <dt class="text-[0.62rem] uppercase tracking-[0.18em] text-mist-500">Author</dt>
+              <dd class="text-glow-100 sm:col-span-2">{data.bookAuthor}</dd>
+            </>
+          )}
+          {data.bookYear && (
+            <>
+              <dt class="text-[0.62rem] uppercase tracking-[0.18em] text-mist-500">Published</dt>
+              <dd class="text-glow-100 sm:col-span-2">{data.bookYear}</dd>
+            </>
+          )}
+          {data.readingFormat && (
+            <>
+              <dt class="text-[0.62rem] uppercase tracking-[0.18em] text-mist-500">Format</dt>
+              <dd class="text-glow-100 sm:col-span-2">
+                {data.readingFormat.charAt(0).toUpperCase() + data.readingFormat.slice(1)}
+                {data.narrator && <span class="text-mist-400"> · narrated by {data.narrator}</span>}
+              </dd>
+            </>
+          )}
+          {data.startedReading && (
+            <>
+              <dt class="text-[0.62rem] uppercase tracking-[0.18em] text-mist-500">Started</dt>
+              <dd class="text-glow-100 sm:col-span-2">{data.startedReading.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</dd>
+            </>
+          )}
+          {data.finishedReading && (
+            <>
+              <dt class="text-[0.62rem] uppercase tracking-[0.18em] text-mist-500">Finished</dt>
+              <dd class="text-glow-100 sm:col-span-2">{data.finishedReading.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</dd>
+            </>
+          )}
+        </dl>
+      </div>
+    )}
 
     {/* YouTube embed for video posts */}
     {data.format === 'video' && data.youtubeId && (

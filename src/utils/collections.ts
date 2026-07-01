@@ -77,6 +77,7 @@ export function typeBasePath(type: PostType): string {
     review: '/reviews',
     stories: '/stories',
     hobby: '/hobby',
+    guides: '/guides',
   };
   return map[type];
 }
@@ -90,6 +91,7 @@ export const TYPE_LABELS: Record<PostType, string> = {
   review: 'Review',
   stories: 'Stories',
   hobby: 'Hobby',
+  guides: 'Guide',
 };
 
 export const TYPE_DESCRIPTIONS: Record<PostType, string> = {
@@ -100,6 +102,8 @@ export const TYPE_DESCRIPTIONS: Record<PostType, string> = {
   stories:
     'Curated stories drawn from actual play — the pure fiction the dice create.',
   hobby: 'Completed projects and step-by-step guides from the painting desk.',
+  guides:
+    'Reading lists, Appendix N indexes, and reference guides for solo play.',
 };
 
 export const GAME_TYPE_LABELS: Record<string, string> = {

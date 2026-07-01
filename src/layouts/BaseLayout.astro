@@ -23,7 +23,7 @@ const {
 const siteTitle =
   title === 'Alone in the Dungeon' ? title : `${title} — Alone in the Dungeon`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://aloneinthedungeon.com');
-const ogImage = new URL(image ?? '/og-default.svg', canonical).toString();
+const ogImage = new URL(image ?? '/og-default.png', canonical).toString();
 const ogImageIsHero = Boolean(image);
 ---
 
@@ -56,7 +56,10 @@ const ogImageIsHero = Boolean(image);
     <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/lora-latin-wght-italic.woff2" />
     <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/inter-latin-wght-normal.woff2" />
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#050509" />
     <link rel="alternate" type="application/rss+xml" title="Alone in the Dungeon" href="/rss.xml" />
 

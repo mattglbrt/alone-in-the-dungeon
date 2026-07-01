@@ -19,7 +19,7 @@ const posts = defineCollection({
         updated: z.coerce.date().optional(),
 
         // Primary content classification
-        type: z.enum(['live-play', 'review', 'stories', 'hobby']),
+        type: z.enum(['live-play', 'review', 'stories', 'hobby', 'guides']),
         format: z
           .enum(['video', 'text', 'image-gallery', 'text-with-images'])
           .default('text'),
@@ -44,6 +44,14 @@ const posts = defineCollection({
 
         heroImage: image().optional(),
         heroImageAlt: z.string().optional(),
+
+        // Book/film review metadata
+        bookAuthor: z.string().optional(),
+        bookYear: z.number().int().optional(),
+        readingFormat: z.enum(['print', 'ebook', 'audiobook']).optional(),
+        narrator: z.string().optional(),
+        startedReading: z.coerce.date().optional(),
+        finishedReading: z.coerce.date().optional(),
 
         draft: z.boolean().default(false),
         featured: z.boolean().default(false),

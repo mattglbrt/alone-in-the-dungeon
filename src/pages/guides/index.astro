@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import OrnamentalDivider from '../../components/OrnamentalDivider.astro';
+import { getPostsByType } from '../../utils/collections';
+
+const posts = await getPostsByType('guides');
+---
+
+<BaseLayout
+  title="Guides"
+  description="Reading lists, Appendix N indexes, and reference guides for solo wargames and tabletop RPGs."
+>
+  <section class="relative mx-auto max-w-3xl px-6 pt-20 pb-10 text-center">
+    <h1 class="candleglow font-pixel text-4xl text-glow-50 md:text-5xl">Guides</h1>
+    <p class="mx-auto mt-6 max-w-xl font-reading text-lg italic text-glow-200/90">
+      Reading lists, Appendix N indexes, and reference guides for solo wargames and tabletop RPGs.
+    </p>
+    <OrnamentalDivider class="mx-auto mt-10 w-44 text-violet-500" />
+  </section>
+
+  {posts.length > 0 ? (
+    <section class="relative mx-auto max-w-6xl px-6 pb-24">
+      <div class="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+        {posts.map((p, i) => <PostCard post={p} eager={i < 3} />)}
+      </div>
+    </section>
+  ) : (
+    <section class="mx-auto max-w-2xl px-6 pb-24 text-center">
+      <p class="font-reading text-lg italic text-glow-200/70">
+        Guides coming soon.
+      </p>
+    </section>
+  )}
+</BaseLayout>
