@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import OrnamentalDivider from '../../components/OrnamentalDivider.astro';
+import { getAllTagsWithCount, tagToLabel } from '../../utils/collections';
+
+const tags = await getAllTagsWithCount();
+const maxCount = tags[0]?.count ?? 1;
+---
+
+<BaseLayout
+  title="Tags"
+  description="Browse all games, products, and topics covered on Alone in the Dungeon."
+>
+  <section class="relative mx-auto max-w-3xl px-6 pt-20 pb-10 text-center">
+    <h1 class="candleglow font-pixel text-4xl text-glow-50 md:text-5xl">Tags</h1>
+    <p class="mx-auto mt-6 max-w-xl font-reading text-lg italic text-glow-200/90">
+      Browse by game, product, or topic — every tag is a thread connecting
+      live plays, reviews, and stories about the same thing.
+    </p>
+    <OrnamentalDivider class="mx-auto mt-10 w-44 text-violet-500" />
+  </section>
+
+  {tags.length > 0 ? (
+    <section class="relative mx-auto max-w-4xl px-6 pb-24">
+      <div class="flex flex-wrap justify-center gap-3">
+        {tags.map(({ tag, count }) => {
+          // Scale font size between text-sm (1 post) and text-2xl (maxCount posts)
+          const ratio = count / maxCount;
+          const sizeClass =
+            ratio >= 0.8 ? 'text-2xl' :
+            ratio >= 0.5 ? 'text-xl' :
+            ratio >= 0.3 ? 'text-lg' :
+            ratio >= 0.15 ? 'text-base' : 'text-sm';
+
+          return (
+            <a
+              href={`/tags/${tag}/`}
+              class={`${sizeClass} rounded-full border border-void-700 px-4 py-2 font-pixel text-mist-400 no-underline transition hover:border-violet-500/60 hover:text-violet-300`}
+              title={`${count} ${count === 1 ? 'post' : 'posts'}`}
+            >
+              {tagToLabel(tag)}
+            </a>
+          );
+        })}
+      </div>
+    </section>
+  ) : (
+    <section class="mx-auto max-w-2xl px-6 pb-24 text-center">
+      <p class="font-reading text-lg italic text-glow-200/70">
+        No tags yet.
+      </p>
+    </section>
+  )}
+</BaseLayout>

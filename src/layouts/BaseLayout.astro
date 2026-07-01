@@ -1,0 +1,96 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import Particles from '../components/Particles.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  ogType?: 'website' | 'article';
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title = 'Alone in the Dungeon',
+  description = 'A blog about solo wargames and tabletop RPGs | session reports, reviews, and rambling.',
+  image,
+  ogType = 'website',
+  structuredData,
+} = Astro.props;
+
+const siteTitle =
+  title === 'Alone in the Dungeon' ? title : `${title} — Alone in the Dungeon`;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://aloneinthedungeon.com');
+const ogImage = new URL(image ?? '/og-default.svg', canonical).toString();
+const ogImageIsHero = Boolean(image);
+---
+
+<!doctype html>
+<html lang="en" data-font-size="md">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{siteTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical.toString()} />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={siteTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical.toString()} />
+    <meta property="og:site_name" content="Alone in the Dungeon" />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content={ogImageIsHero ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={siteTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Preload critical fonts so they land before the first paint.
+         Pixelify Sans: wordmark + all headings (above fold).
+         Lora: body text. Both are self-hosted in /fonts/ for a stable URL. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/pixelify-sans-latin-wght-normal.woff2" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/lora-latin-wght-normal.woff2" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/lora-latin-wght-italic.woff2" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/inter-latin-wght-normal.woff2" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#050509" />
+    <link rel="alternate" type="application/rss+xml" title="Alone in the Dungeon" href="/rss.xml" />
+
+    {structuredData && (Array.isArray(structuredData) ? structuredData : [structuredData]).map((sd) => (
+      <script type="application/ld+json" set:html={JSON.stringify(sd)} />
+    ))}
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q23Q3QK3QM"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-Q23Q3QK3QM');
+    </script>
+  </head>
+  <body class="bg-void-950 text-glow-100">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:rounded focus:border focus:border-violet-500 focus:bg-void-900 focus:px-4 focus:py-2 focus:font-sans focus:text-sm focus:text-glow-50"
+    >
+      Skip to content
+    </a>
+
+    <div class="relative z-10 flex min-h-screen flex-col">
+      <Nav />
+      <main id="main" class="flex-1">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+
+    <Particles />
+    <div class="atmosphere-layer atmosphere-grain" aria-hidden="true"></div>
+    <div class="atmosphere-layer atmosphere-vignette" aria-hidden="true"></div>
+  </body>
+</html>

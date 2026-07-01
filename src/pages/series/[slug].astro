@@ -1,0 +1,121 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import OrnamentalDivider from '../../components/OrnamentalDivider.astro';
+import {
+  getSeriesPosts,
+  TYPE_LABELS,
+  GAME_TYPE_LABELS,
+  STATUS_LABELS,
+  typeBasePath,
+  formatDate,
+} from '../../utils/collections';
+
+export async function getStaticPaths() {
+  const allSeries = await getCollection('series');
+  return allSeries.map((s) => ({
+    params: { slug: s.id },
+    props: { series: s },
+  }));
+}
+
+const { series } = Astro.props;
+const { data } = series;
+const { Content } = await render(series);
+const posts = await getSeriesPosts(series.id);
+const typeLabel = TYPE_LABELS[data.type];
+const typePath = typeBasePath(data.type);
+
+const breadcrumbData = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://aloneinthedungeon.com/' },
+    { '@type': 'ListItem', position: 2, name: typeLabel, item: `https://aloneinthedungeon.com${typePath}/` },
+    { '@type': 'ListItem', position: 3, name: data.title },
+  ],
+};
+
+const itemListData = posts.length > 0
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: data.title,
+      description: data.description,
+      itemListElement: posts.map((p, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: p.data.title,
+        url: `https://aloneinthedungeon.com${typePath}/${p.id}/`,
+      })),
+    }
+  : null;
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.description}
+  structuredData={itemListData ? [breadcrumbData, itemListData] : [breadcrumbData]}
+>
+  <!-- Breadcrumb -->
+  <nav aria-label="Breadcrumb" class="mx-auto max-w-3xl px-6 pt-8">
+    <ol class="flex flex-wrap items-center gap-1.5 font-sans text-[0.62rem] uppercase tracking-[0.18em] text-mist-500">
+      <li><a href="/" class="no-underline hover:text-violet-300 transition">Home</a></li>
+      <li aria-hidden="true" class="text-void-600">›</li>
+      <li><a href={`${typePath}/`} class="no-underline hover:text-violet-300 transition">{typeLabel}</a></li>
+      <li aria-hidden="true" class="text-void-600">›</li>
+      <li class="text-glow-200/70">{data.title}</li>
+    </ol>
+  </nav>
+
+  <header class="mx-auto max-w-3xl px-6 pt-10 pb-10 text-center">
+    <div class="mb-6 flex flex-wrap items-center justify-center gap-3 font-sans text-[0.62rem] uppercase tracking-[0.24em]">
+      <span class="rounded-full border border-violet-600/50 px-3 py-1 text-violet-300">
+        {typeLabel}
+      </span>
+      {data.gameType && (
+        <span class="text-mist-500">{GAME_TYPE_LABELS[data.gameType]}</span>
+      )}
+      {data.system && (
+        <span class="text-azure-400/80">{data.system}</span>
+      )}
+      <span class={`text-mist-500 ${data.status === 'ongoing' ? 'text-emerald-400/80' : ''}`}>
+        {STATUS_LABELS[data.status]}
+      </span>
+    </div>
+
+    <h1 class="candleglow font-pixel text-4xl leading-tight text-glow-50 md:text-5xl">
+      {data.title}
+    </h1>
+
+    <p class="mt-5 font-sans text-xs uppercase tracking-[0.18em] text-mist-600">
+      Started {formatDate(data.startDate)}
+    </p>
+
+    <OrnamentalDivider class="mx-auto mt-10 w-44 text-violet-500" />
+  </header>
+
+  {/* Series description from MDX body */}
+  <div class="prose-body mx-auto max-w-[var(--container-prose)] px-6 pb-10">
+    <Content />
+  </div>
+
+  {posts.length > 0 ? (
+    <section class="relative mx-auto max-w-6xl px-6 pb-24">
+      <h2 class="heading-rule-left mb-8 font-pixel text-xl text-glow-50">
+        {data.type === 'stories' ? 'Chapters' : 'Episodes'}
+        <span class="ml-3 font-sans text-sm font-normal text-mist-500">({posts.length})</span>
+      </h2>
+      <div class="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+        {posts.map((p, i) => <PostCard post={p} eager={i < 3} />)}
+      </div>
+    </section>
+  ) : (
+    <section class="mx-auto max-w-2xl px-6 pb-24 text-center">
+      <p class="font-reading text-lg italic text-glow-200/70">
+        No episodes yet. The campaign is being prepared.
+      </p>
+    </section>
+  )}
+</BaseLayout>

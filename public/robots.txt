@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://aloneinthedungeon.com/sitemap-index.xml

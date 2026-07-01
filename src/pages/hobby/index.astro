@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import OrnamentalDivider from '../../components/OrnamentalDivider.astro';
+import { getPostsByType } from '../../utils/collections';
+
+const posts = await getPostsByType('hobby');
+---
+
+<BaseLayout
+  title="Hobby"
+  description="Completed miniature projects, painting guides, and hobby how-tos from the painting desk."
+>
+  <section class="relative mx-auto max-w-3xl px-6 pt-20 pb-10 text-center">
+    <h1 class="candleglow font-pixel text-4xl text-glow-50 md:text-5xl">Hobby</h1>
+    <p class="mx-auto mt-6 max-w-xl font-reading text-lg italic text-glow-200/90">
+      Completed miniature projects, painting guides, and step-by-step how-tos
+      from the desk beside the dungeon.
+    </p>
+    <OrnamentalDivider class="mx-auto mt-10 w-44 text-violet-500" />
+  </section>
+
+  {posts.length > 0 ? (
+    <section class="relative mx-auto max-w-6xl px-6 pb-24">
+      <div class="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+        {posts.map((p, i) => <PostCard post={p} eager={i < 3} />)}
+      </div>
+    </section>
+  ) : (
+    <section class="mx-auto max-w-2xl px-6 pb-24 text-center">
+      <p class="font-reading text-lg italic text-glow-200/70">
+        Nothing on the painting desk yet. The brushes are drying.
+      </p>
+    </section>
+  )}
+</BaseLayout>

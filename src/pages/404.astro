@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import OrnamentalDivider from '../components/OrnamentalDivider.astro';
+---
+
+<BaseLayout title="Lost in the dark" description="This passage leads nowhere.">
+  <section class="relative mx-auto flex min-h-[60vh] max-w-2xl flex-col items-center justify-center px-6 py-24 text-center">
+    <h1 class="candleglow font-pixel text-6xl text-glow-50">404</h1>
+    <p class="mt-8 font-reading text-lg italic text-glow-200/90">
+      Your torch dies. This passage leads nowhere. There is only damp stone
+      and the sound of distant footsteps.
+    </p>
+    <OrnamentalDivider class="mt-10 w-44 text-violet-500" />
+    <a
+      href="/"
+      class="witchlight mt-10 rounded border border-violet-500/60 px-5 py-2.5 font-pixel text-sm text-glow-50 no-underline transition hover:border-violet-400 hover:bg-violet-500/10"
+    >
+      Back to the entrance
+    </a>
+  </section>
+</BaseLayout>

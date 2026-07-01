@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import OrnamentalDivider from '../../components/OrnamentalDivider.astro';
+import { getPublishedPosts } from '../../utils/collections';
+
+const posts = await getPublishedPosts();
+
+const filters = [
+  { key: 'all', label: 'All' },
+  { key: 'live-play', label: 'Live Plays' },
+  { key: 'review', label: 'Reviews' },
+  { key: 'stories', label: 'Stories' },
+  { key: 'hobby', label: 'Hobby' },
+];
+---
+
+<BaseLayout
+  title="All Posts"
+  description="Every live play, review, story, and hobby post from Alone in the Dungeon."
+>
+  <section class="relative mx-auto max-w-3xl px-6 pt-20 pb-10 text-center">
+    <h1 class="candleglow font-pixel text-4xl text-glow-50 md:text-5xl">All Posts</h1>
+    <p class="mx-auto mt-6 max-w-xl font-reading text-lg italic text-glow-200/90">
+      Every session, review, story, and hobby post — in one place.
+    </p>
+    <OrnamentalDivider class="mx-auto mt-10 w-44 text-violet-500" />
+  </section>
+
+  <section class="relative mx-auto max-w-6xl px-6 pb-24">
+    <div class="mb-8 flex flex-wrap justify-center gap-3" role="group" aria-label="Filter by type">
+      {filters.map((f) => (
+        <button
+          type="button"
+          data-filter={f.key}
+          class="font-pixel text-sm rounded-full border border-void-700 px-4 py-1.5 text-mist-400 transition hover:border-violet-500 hover:text-glow-50 aria-pressed:border-violet-400 aria-pressed:bg-violet-500/10 aria-pressed:text-violet-200"
+          aria-pressed={f.key === 'all' ? 'true' : 'false'}
+        >
+          {f.label}
+        </button>
+      ))}
+    </div>
+
+    {posts.length > 0 ? (
+      <div class="grid gap-7 md:grid-cols-2 lg:grid-cols-3" data-post-grid>
+        {posts.map((p, i) => (
+          <div data-type={p.data.type}>
+            <PostCard post={p} eager={i < 3} />
+          </div>
+        ))}
+      </div>
+    ) : (
+      <p class="text-center font-reading text-lg italic text-glow-200/80">
+        No posts yet — the dungeon is quiet.
+      </p>
+    )}
+  </section>
+</BaseLayout>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const items = document.querySelectorAll<HTMLElement>('[data-post-grid] > [data-type]');
+
+  function apply(key: string) {
+    items.forEach((item) => {
+      const show = key === 'all' || item.dataset.type === key;
+      item.style.display = show ? '' : 'none';
+    });
+    buttons.forEach((b) =>
+      b.setAttribute('aria-pressed', String(b.dataset.filter === key)),
+    );
+  }
+
+  buttons.forEach((b) =>
+    b.addEventListener('click', () => apply(b.dataset.filter ?? 'all')),
+  );
+
+  const initial = new URLSearchParams(location.search).get('type');
+  if (initial && [...buttons].some((b) => b.dataset.filter === initial)) {
+    apply(initial);
+  }
+</script>

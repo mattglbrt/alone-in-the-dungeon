@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import OrnamentalDivider from '../../components/OrnamentalDivider.astro';
+import {
+  getAllTagsWithCount,
+  getPostsByTag,
+  tagToLabel,
+} from '../../utils/collections';
+
+export async function getStaticPaths() {
+  const tags = await getAllTagsWithCount();
+  return tags.map(({ tag }) => ({
+    params: { tag },
+  }));
+}
+
+const { tag } = Astro.params;
+const label = tagToLabel(tag);
+const posts = await getPostsByTag(tag);
+
+const breadcrumbData = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://aloneinthedungeon.com/' },
+    { '@type': 'ListItem', position: 2, name: 'Tags', item: 'https://aloneinthedungeon.com/tags/' },
+    { '@type': 'ListItem', position: 3, name: label },
+  ],
+};
+---
+
+<BaseLayout
+  title={`${label} — Tagged posts`}
+  description={`All posts tagged with ${label} on Alone in the Dungeon — live plays, reviews, stories, and hobby content.`}
+  structuredData={breadcrumbData}
+>
+  <!-- Breadcrumb -->
+  <nav aria-label="Breadcrumb" class="mx-auto max-w-3xl px-6 pt-8">
+    <ol class="flex flex-wrap items-center gap-1.5 font-sans text-[0.62rem] uppercase tracking-[0.18em] text-mist-500">
+      <li><a href="/" class="no-underline hover:text-violet-300 transition">Home</a></li>
+      <li aria-hidden="true" class="text-void-600">›</li>
+      <li><a href="/tags/" class="no-underline hover:text-violet-300 transition">Tags</a></li>
+      <li aria-hidden="true" class="text-void-600">›</li>
+      <li class="text-glow-200/70">{label}</li>
+    </ol>
+  </nav>
+
+  <section class="relative mx-auto max-w-3xl px-6 pt-10 pb-10 text-center">
+    <p class="font-sans text-[0.62rem] uppercase tracking-[0.32em] text-mist-500">Tagged</p>
+    <h1 class="candleglow mt-3 font-pixel text-4xl text-glow-50 md:text-5xl">{label}</h1>
+    <p class="mt-4 font-sans text-sm text-mist-500">
+      {posts.length} {posts.length === 1 ? 'post' : 'posts'}
+    </p>
+    <OrnamentalDivider class="mx-auto mt-8 w-44 text-violet-500" />
+  </section>
+
+  {posts.length > 0 ? (
+    <section class="relative mx-auto max-w-6xl px-6 pb-24">
+      <div class="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+        {posts.map((p, i) => <PostCard post={p} eager={i < 3} />)}
+      </div>
+    </section>
+  ) : (
+    <section class="mx-auto max-w-2xl px-6 pb-24 text-center">
+      <p class="font-reading text-lg italic text-glow-200/70">
+        No posts with this tag yet.
+      </p>
+    </section>
+  )}
+</BaseLayout>

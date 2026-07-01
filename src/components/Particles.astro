@@ -1,0 +1,10 @@
+---
+// Mounts the ASCII campfire particle layer. The engine appends its own fixed
+// layer to <body>, so this component renders nothing itself — it just boots
+// the script once the DOM is ready.
+---
+
+<script>
+  import { installParticles } from '../scripts/particles';
+  installParticles();
+</script>

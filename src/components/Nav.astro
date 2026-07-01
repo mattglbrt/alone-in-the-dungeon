@@ -1,0 +1,80 @@
+---
+const links = [
+  { href: '/live-plays/', label: 'Live Plays', duration: '5.9s', delay: '-1.2s' },
+  { href: '/reviews/', label: 'Reviews', duration: '5.5s', delay: '-4.1s' },
+  { href: '/stories/', label: 'Stories', duration: '5.1s', delay: '-2.8s' },
+  { href: '/hobby/', label: 'Hobby', duration: '6.7s', delay: '-3.4s' },
+  { href: '/about/', label: 'About', duration: '6.3s', delay: '-0.5s' },
+  { href: '/contact/', label: 'Contact', duration: '5.7s', delay: '-3.9s' },
+];
+---
+
+<header class="relative z-20 border-b border-void-700/80 bg-void-950/70 backdrop-blur-sm">
+  <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
+    <a
+      href="/"
+      class="witchlight font-pixel text-xl tracking-[0.08em] text-glow-50 no-underline hover:text-violet-300"
+    >
+      Alone in the Dungeon
+    </a>
+
+    <nav class="hidden md:block" aria-label="Primary">
+      <ul class="flex items-center gap-6 font-pixel text-sm tracking-[0.06em] text-glow-100">
+        {links.map((l) => (
+          <li>
+            <a
+              href={l.href}
+              class="witchlight no-underline transition hover:text-violet-300"
+              style={`animation-duration: ${l.duration}; animation-delay: ${l.delay};`}
+            >
+              {l.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <button
+      type="button"
+      class="md:hidden inline-flex h-11 w-11 items-center justify-center rounded border border-void-700 text-glow-100"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+      data-nav-toggle
+    >
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <line x1="4" y1="7" x2="20" y2="7" />
+        <line x1="4" y1="12" x2="20" y2="12" />
+        <line x1="4" y1="17" x2="20" y2="17" />
+      </svg>
+    </button>
+  </div>
+
+  <nav
+    class="md:hidden hidden border-t border-void-700/80 bg-void-900"
+    aria-label="Mobile"
+    data-nav-menu
+  >
+    <ul class="mx-auto flex max-w-6xl flex-col px-6 py-4 font-pixel text-sm tracking-[0.06em] text-glow-100">
+      {links.map((l) => (
+        <li>
+          <a
+            href={l.href}
+            class="witchlight block py-3 no-underline transition hover:text-violet-300"
+            style={`animation-duration: ${l.duration}; animation-delay: ${l.delay};`}
+          >
+            {l.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.querySelector('[data-nav-toggle]');
+  const menu = document.querySelector('[data-nav-menu]');
+  toggle?.addEventListener('click', () => {
+    const open = menu?.classList.toggle('hidden') === false;
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+</script>

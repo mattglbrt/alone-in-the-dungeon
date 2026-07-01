@@ -1,0 +1,225 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import OrnamentalDivider from '../components/OrnamentalDivider.astro';
+
+const projects = [
+  {
+    name: 'The Hobbinomicon',
+    url: 'https://hobbinomicon.com',
+    description: 'Daily hobby vlog, reviews, and tabletop content.',
+  },
+  {
+    name: 'Valtiare',
+    url: 'https://valtiare.com',
+    description: 'Writing and finished art.',
+  },
+  {
+    name: 'Yellow Imp Miniatures',
+    url: 'https://yellowimp.com',
+    description: '3D printed and resin cast miniatures. Coming soon.',
+    comingSoon: true,
+  },
+  {
+    name: 'The Table\'s Edge',
+    url: 'https://thetablesedge.com',
+    description: 'Coming soon.',
+    comingSoon: true,
+  },
+];
+
+const channels = [
+  { name: 'Alone in the Dungeon', url: 'https://www.youtube.com/@AloneInTheDungeon' },
+  { name: 'The Hobbinomicon', url: 'https://www.youtube.com/@TheHobbinomicon' },
+  { name: 'Daily Hobby Vlog', url: 'https://www.youtube.com/@Hobbinomicon' },
+  { name: 'Hobbinomicon: Warmachine', url: 'https://www.youtube.com/@TheHobbinomiconWarmachine' },
+  { name: 'Hobbinomicon: KDM', url: 'https://www.youtube.com/@TheHobbinomiconKDM' },
+];
+
+const socials = [
+  {
+    name: 'Instagram',
+    handle: '@hobbinomicon',
+    url: 'https://www.instagram.com/hobbinomicon/',
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>`,
+  },
+  {
+    name: 'Discord',
+    handle: 'Community Server',
+    url: 'https://discord.gg/9kzUhhk86r',
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>`,
+  },
+];
+---
+
+<BaseLayout
+  title="Contact"
+  description="Get in touch with Matt Gilbert about solo wargaming, tabletop RPGs, miniatures, and everything else."
+>
+  <section class="relative mx-auto max-w-3xl px-6 pt-20 pb-10 text-center">
+    <h1 class="candleglow font-pixel text-4xl text-glow-50 md:text-5xl">Get in Touch</h1>
+    <p class="mx-auto mt-6 max-w-lg font-reading text-lg italic text-glow-200/90">
+      Questions, feedback, collabs, or just want to talk?
+    </p>
+    <OrnamentalDivider class="mx-auto mt-10 w-44 text-violet-500" />
+  </section>
+
+  <!-- Contact form -->
+  <section class="mx-auto max-w-xl px-6 pb-20">
+    <form
+      name="contact"
+      method="POST"
+      action="/thanks/"
+      data-netlify="true"
+      netlify-honeypot="bot-field"
+      class="space-y-6"
+    >
+      <input type="hidden" name="form-name" value="contact" />
+      <p class="hidden" aria-hidden="true">
+        <label>Skip this: <input name="bot-field" /></label>
+      </p>
+
+      <div>
+        <label for="name" class="mb-2 block font-sans text-[0.65rem] uppercase tracking-[0.22em] text-mist-500">
+          Name
+        </label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          required
+          autocomplete="name"
+          class="w-full rounded border border-void-700 bg-void-900/80 px-4 py-3 font-reading text-glow-100 placeholder-mist-600 transition focus:border-violet-500/60 focus:outline-none focus:ring-1 focus:ring-violet-500/40"
+          placeholder="Your name"
+        />
+      </div>
+
+      <div>
+        <label for="email" class="mb-2 block font-sans text-[0.65rem] uppercase tracking-[0.22em] text-mist-500">
+          Email
+        </label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          required
+          autocomplete="email"
+          class="w-full rounded border border-void-700 bg-void-900/80 px-4 py-3 font-reading text-glow-100 placeholder-mist-600 transition focus:border-violet-500/60 focus:outline-none focus:ring-1 focus:ring-violet-500/40"
+          placeholder="your@email.com"
+        />
+      </div>
+
+      <div>
+        <label for="subject" class="mb-2 block font-sans text-[0.65rem] uppercase tracking-[0.22em] text-mist-500">
+          Subject
+        </label>
+        <input
+          type="text"
+          id="subject"
+          name="subject"
+          class="w-full rounded border border-void-700 bg-void-900/80 px-4 py-3 font-reading text-glow-100 placeholder-mist-600 transition focus:border-violet-500/60 focus:outline-none focus:ring-1 focus:ring-violet-500/40"
+          placeholder="What's on your mind?"
+        />
+      </div>
+
+      <div>
+        <label for="message" class="mb-2 block font-sans text-[0.65rem] uppercase tracking-[0.22em] text-mist-500">
+          Message
+        </label>
+        <textarea
+          id="message"
+          name="message"
+          required
+          rows="6"
+          class="w-full rounded border border-void-700 bg-void-900/80 px-4 py-3 font-reading text-glow-100 placeholder-mist-600 transition focus:border-violet-500/60 focus:outline-none focus:ring-1 focus:ring-violet-500/40 resize-y"
+          placeholder="Your message..."
+        ></textarea>
+      </div>
+
+      <button
+        type="submit"
+        class="witchlight w-full rounded border border-violet-500/60 px-5 py-3 font-pixel text-sm text-glow-50 transition hover:border-violet-400 hover:bg-violet-500/10"
+      >
+        Send message
+      </button>
+    </form>
+
+    <p class="mt-8 text-center font-sans text-xs tracking-[0.14em] text-mist-500">
+      Or email directly:
+      <a href="mailto:matt@hobbinomicon.com" class="text-violet-300 hover:text-glow-50 transition">
+        matt@hobbinomicon.com
+      </a>
+    </p>
+  </section>
+
+  <!-- Other projects -->
+  <section class="mx-auto max-w-4xl px-6 pb-24">
+    <OrnamentalDivider class="mx-auto mb-16 w-44 text-violet-500" />
+
+    <h2 class="heading-rule-left mb-10 font-pixel text-2xl text-glow-50">Other Projects</h2>
+
+    <div class="grid gap-5 sm:grid-cols-2">
+      {projects.map((p) => (
+        <a
+          href={p.comingSoon ? undefined : p.url}
+          class={`rune-card block p-6 no-underline ${p.comingSoon ? 'opacity-50 cursor-default pointer-events-none' : 'group'}`}
+          {...(p.comingSoon ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
+        >
+          <h3 class="font-pixel text-lg text-glow-50 transition group-hover:text-violet-300">
+            {p.name}
+            {p.comingSoon && (
+              <span class="ml-2 font-sans text-[0.6rem] uppercase tracking-[0.2em] text-mist-500">Soon</span>
+            )}
+          </h3>
+          <p class="mt-2 font-reading text-sm text-glow-200/75">{p.description}</p>
+          {!p.comingSoon && (
+            <p class="mt-3 font-sans text-[0.62rem] uppercase tracking-[0.18em] text-violet-300">
+              {p.url.replace('https://', '')} →
+            </p>
+          )}
+        </a>
+      ))}
+    </div>
+
+    <!-- YouTube -->
+    <div class="mt-12">
+      <h3 class="mb-6 font-pixel text-lg text-glow-50">YouTube Channels</h3>
+      <ul class="space-y-3">
+        {channels.map((c) => (
+          <li>
+            <a
+              href={c.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center gap-3 font-reading text-glow-200/85 no-underline transition hover:text-violet-300"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="shrink-0 text-violet-400">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+              {c.name}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Social -->
+    <div class="mt-10">
+      <h3 class="mb-6 font-pixel text-lg text-glow-50">Social</h3>
+      <ul class="space-y-3">
+        {socials.map((s) => (
+          <li>
+            <a
+              href={s.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center gap-3 font-reading text-glow-200/85 no-underline transition hover:text-violet-300"
+            >
+              <span class="shrink-0 text-violet-400" set:html={s.icon} />
+              <span>{s.name} <span class="text-mist-500">{s.handle}</span></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,202 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import OrnamentalDivider from '../components/OrnamentalDivider.astro';
+import ReadingTime from '../components/ReadingTime.astro';
+import type { Post } from '../utils/collections';
+import {
+  TYPE_LABELS,
+  GAME_TYPE_LABELS,
+  FORMAT_LABELS,
+  STATUS_LABELS,
+  typeBasePath,
+  tagToLabel,
+  formatDate,
+} from '../utils/collections';
+
+interface Props {
+  post: Post;
+  readingTime?: number;
+}
+const { post, readingTime } = Astro.props;
+const { data } = post;
+
+const typeLabel = TYPE_LABELS[data.type];
+const typePath = typeBasePath(data.type);
+
+// Fetch series entry for breadcrumb + metadata
+const seriesEntry = data.series
+  ? (await getCollection('series')).find((s) => s.id === data.series)
+  : undefined;
+
+const structuredData: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': data.format === 'video' ? 'VideoObject' : 'BlogPosting',
+  headline: data.title,
+  description: data.description,
+  datePublished: data.date.toISOString(),
+  ...(data.updated && { dateModified: data.updated.toISOString() }),
+  author: { '@type': 'Person', name: 'Alone in the Dungeon' },
+};
+
+const breadcrumbData = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://aloneinthedungeon.com/' },
+    { '@type': 'ListItem', position: 2, name: typeLabel, item: `https://aloneinthedungeon.com${typePath}/` },
+    ...(seriesEntry
+      ? [{ '@type': 'ListItem', position: 3, name: seriesEntry.data.title, item: `https://aloneinthedungeon.com/series/${seriesEntry.id}/` }]
+      : []),
+    { '@type': 'ListItem', position: seriesEntry ? 4 : 3, name: data.title },
+  ],
+};
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.description}
+  ogType="article"
+  structuredData={[structuredData, breadcrumbData]}
+>
+
+  <article class="relative">
+    <!-- Breadcrumb -->
+    <nav aria-label="Breadcrumb" class="mx-auto max-w-3xl px-6 pt-8">
+      <ol class="flex flex-wrap items-center gap-1.5 font-sans text-[0.62rem] uppercase tracking-[0.18em] text-mist-500">
+        <li><a href="/" class="no-underline hover:text-violet-300 transition">Home</a></li>
+        <li aria-hidden="true" class="text-void-600">›</li>
+        <li><a href={`${typePath}/`} class="no-underline hover:text-violet-300 transition">{typeLabel}</a></li>
+        {seriesEntry && (
+          <>
+            <li aria-hidden="true" class="text-void-600">›</li>
+            <li><a href={`/series/${seriesEntry.id}/`} class="no-underline hover:text-violet-300 transition">{seriesEntry.data.title}</a></li>
+          </>
+        )}
+        <li aria-hidden="true" class="text-void-600">›</li>
+        <li class="text-glow-200/70 truncate max-w-[16rem]">{data.title}</li>
+      </ol>
+    </nav>
+
+    <!-- Candlelit header -->
+    <header class="mx-auto max-w-3xl px-6 pt-10 pb-10 text-center">
+      <div class="mb-6 flex flex-wrap items-center justify-center gap-3 font-sans text-[0.62rem] uppercase tracking-[0.24em]">
+        <span class="rounded-full border border-violet-600/50 px-3 py-1 text-violet-300">
+          {typeLabel}
+        </span>
+        {data.gameType && (
+          <span class="text-mist-500">{GAME_TYPE_LABELS[data.gameType]}</span>
+        )}
+        {data.format === 'video' && (
+          <span class="text-azure-400/80">{FORMAT_LABELS[data.format]}</span>
+        )}
+        {data.episode != null && (
+          <span class="text-mist-500">Episode {data.episode}</span>
+        )}
+      </div>
+
+      <h1 class="candleglow font-pixel text-3xl leading-tight text-glow-50 md:text-4xl lg:text-5xl">
+        {data.title}
+      </h1>
+
+      {data.system && (
+        <p class="mt-5 font-sans text-sm uppercase tracking-[0.18em] text-azure-400/90">
+          {data.system}
+        </p>
+      )}
+
+      <p class="mx-auto mt-6 max-w-xl font-reading text-base italic text-glow-200/90 md:text-lg">
+        {data.description}
+      </p>
+
+      <div class="mt-7 flex items-center justify-center gap-3 font-sans text-xs uppercase tracking-[0.18em] text-mist-500">
+        <span>{formatDate(data.date)}</span>
+        <span class="text-void-600">·</span>
+        <ReadingTime minutes={readingTime} />
+      </div>
+
+      <OrnamentalDivider class="mx-auto mt-10 w-44 text-violet-500" />
+    </header>
+
+    {/* YouTube embed for video posts */}
+    {data.format === 'video' && data.youtubeId && (
+      <div class="mx-auto max-w-4xl px-6 mb-10">
+        <div class="relative overflow-hidden rounded-md border border-void-700 aspect-video">
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${data.youtubeId}`}
+            title={data.title}
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            class="absolute inset-0 h-full w-full border-0"
+          ></iframe>
+        </div>
+      </div>
+    )}
+
+    {data.heroImage && data.format !== 'video' && (
+      <div class="mx-auto max-w-4xl px-6">
+        <div class="overflow-hidden rounded-md border border-void-700">
+          <Image
+            src={data.heroImage}
+            alt={data.heroImageAlt ?? data.title}
+            loading="eager"
+            widths={[720, 1080, 1440]}
+            sizes="(min-width: 1024px) 896px, 92vw"
+            class="block h-auto w-full object-cover"
+          />
+        </div>
+      </div>
+    )}
+
+    <!-- Body -->
+    <div class="prose-body mx-auto max-w-[var(--container-prose)] px-6 py-14">
+      <slot />
+    </div>
+
+    {data.tags.length > 0 && (
+      <div class="mx-auto max-w-[var(--container-prose)] px-6 pb-10">
+        <div class="flex flex-wrap gap-2">
+          {data.tags.map((t) => (
+            <a
+              href={`/tags/${t}/`}
+              class="rounded-full border border-void-700 px-3 py-1 font-sans text-xs tracking-[0.1em] text-mist-400 no-underline transition hover:border-violet-500/60 hover:text-violet-300"
+            >
+              {tagToLabel(t)}
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Series nav -->
+    {seriesEntry && (
+      <div class="mx-auto max-w-[var(--container-prose)] px-6 pb-10">
+        <div class="rounded border border-void-700 bg-void-900/50 px-6 py-5">
+          <p class="font-sans text-[0.62rem] uppercase tracking-[0.24em] text-violet-300">
+            Part of the series
+          </p>
+          <p class="mt-1 font-pixel text-lg text-glow-50">{seriesEntry.data.title}</p>
+          {seriesEntry.data.status && (
+            <p class="mt-1 font-sans text-xs text-mist-500">
+              {STATUS_LABELS[seriesEntry.data.status]}
+            </p>
+          )}
+          <a
+            href={`/series/${seriesEntry.id}/`}
+            class="mt-3 inline-block font-pixel text-sm text-violet-300 no-underline hover:text-glow-50"
+          >
+            View all episodes →
+          </a>
+        </div>
+      </div>
+    )}
+
+    <div class="mx-auto max-w-[var(--container-prose)] px-6 pb-10 text-center">
+      <a href={`${typePath}/`} class="font-pixel text-sm text-violet-300 no-underline hover:text-glow-50">
+        ← Back to {typeLabel}
+      </a>
+    </div>
+  </article>
+</BaseLayout>

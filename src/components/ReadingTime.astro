@@ -1,0 +1,13 @@
+---
+import { formatReadingTime } from '../utils/readingTime';
+
+interface Props {
+  minutes?: number;
+  class?: string;
+}
+const { minutes, class: className = '' } = Astro.props;
+---
+
+<span class={`font-sans text-xs uppercase tracking-[0.18em] text-mist-500 ${className}`}>
+  {formatReadingTime(minutes)}
+</span>

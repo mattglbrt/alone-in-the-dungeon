@@ -1,0 +1,34 @@
+---
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<svg
+  viewBox="0 0 240 24"
+  class={`block h-6 ${className}`}
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1"
+  stroke-linecap="round"
+  aria-hidden="true"
+>
+  <line x1="0" y1="12" x2="98" y2="12" stroke-opacity="0.6" />
+  <line x1="142" y1="12" x2="240" y2="12" stroke-opacity="0.6" />
+
+  <!-- a small four-point arcane spark at centre -->
+  <path
+    d="M120 2 L123 12 L120 22 L117 12 Z"
+    fill="currentColor"
+    fill-opacity="0.18"
+  />
+  <path
+    d="M108 12 L130 12 M120 2 L120 22"
+    stroke-opacity="0.5"
+  />
+  <circle cx="120" cy="12" r="2.2" fill="currentColor" />
+
+  <circle cx="98" cy="12" r="1.2" fill="currentColor" />
+  <circle cx="142" cy="12" r="1.2" fill="currentColor" />
+</svg>
