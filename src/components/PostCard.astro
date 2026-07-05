@@ -18,7 +18,12 @@ const { post, eager = false } = Astro.props;
 const { data } = post;
 const isVideo = data.format === 'video';
 const typeLabel = data.storyKind ? STORY_KIND_LABELS[data.storyKind] : TYPE_LABELS[data.type];
+// maxresdefault is the true 16:9 frame; hqdefault/sddefault are 4:3 and
+// letterbox 16:9 videos with black bars. maxresdefault 404s for videos
+// that were never processed at high resolution, so fall back on error.
 const youtubeThumbnail =
+  isVideo && data.youtubeId ? `https://i.ytimg.com/vi/${data.youtubeId}/maxresdefault.jpg` : null;
+const youtubeThumbnailFallback =
   isVideo && data.youtubeId ? `https://i.ytimg.com/vi/${data.youtubeId}/hqdefault.jpg` : null;
 ---
 
@@ -50,6 +55,7 @@ const youtubeThumbnail =
         src={youtubeThumbnail}
         alt={data.title}
         loading={eager ? 'eager' : 'lazy'}
+        onerror={`this.onerror=null;this.src='${youtubeThumbnailFallback}'`}
         class="aspect-[5/3] w-full object-cover transition duration-500 group-hover:scale-[1.03]"
       />
       <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-void-950/70 to-transparent"></div>

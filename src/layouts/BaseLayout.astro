@@ -49,11 +49,11 @@ const ogImageIsHero = Boolean(image);
     <meta name="twitter:image" content={ogImage} />
 
     <!-- Preload critical fonts so they land before the first paint.
-         Uncial Antiqua: wordmark + all headings (above fold) — declared with
+         IM Fell English: wordmark + all headings (above fold) — declared with
          font-display: optional (see global.css) so a slow fetch never causes
          a visible swap; preloading just improves the odds it's ready in time.
          Lora: body text. All are self-hosted in /fonts/ for a stable URL. -->
-    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/uncial-antiqua-latin-400-normal.woff2" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/im-fell-english-latin-400-normal.woff2" />
     <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/lora-latin-wght-normal.woff2" />
     <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/lora-latin-wght-italic.woff2" />
     <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/inter-latin-wght-normal.woff2" />

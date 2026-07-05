@@ -2,7 +2,7 @@
    eliminating the @import waterfall. Inter is non-critical (tiny labels only) so
    it stays as an @import and loads asynchronously.
 
-   Uncial Antiqua uses font-display: optional rather than swap: it's the
+   IM Fell English uses font-display: optional rather than swap: it's the
    wordmark/heading face, visible above the fold on every page, so a slow
    fetch must never trigger a visible swap (FOUT) or reflow (CLS). With
    `optional` the browser renders with the fallback immediately if the font
@@ -10,11 +10,11 @@
    The preload in BaseLayout still fetches it eagerly so it's cached in time
    for most first visits and every subsequent page. */
 @font-face {
-  font-family: 'Uncial Antiqua';
+  font-family: 'IM Fell English';
   font-style: normal;
   font-display: optional;
   font-weight: 400;
-  src: url('/fonts/uncial-antiqua-latin-400-normal.woff2') format('woff2');
+  src: url('/fonts/im-fell-english-latin-400-normal.woff2') format('woff2');
   unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
 }
 
@@ -96,7 +96,7 @@
   --color-brass-700: #6b5d3e;
 
   /* Typography */
-  --font-pixel: "Uncial Antiqua", "Luminari", fantasy, serif;
+  --font-pixel: "IM Fell English", Georgia, "Times New Roman", serif;
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-reading: "Lora Variable", Georgia, "Times New Roman", serif;
 
@@ -131,8 +131,8 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-pixel);
     color: var(--color-glow-50);
-    /* Uncial Antiqua only ships a 400 weight; anything heavier triggers
-       synthetic (faux) bold, which distorts calligraphic strokes. */
+    /* IM Fell English only ships a 400 weight; anything heavier triggers
+       synthetic (faux) bold, which distorts its engraved, old-style strokes. */
     font-weight: 400;
     letter-spacing: 0.01em;
     line-height: 1.25;
