@@ -1,13 +1,26 @@
 ---
 const links = [
   { href: '/live-plays/', label: 'Live Plays', duration: '5.9s', delay: '-1.2s' },
-  { href: '/reviews/', label: 'Reviews', duration: '5.5s', delay: '-4.1s' },
   { href: '/stories/', label: 'Stories', duration: '5.1s', delay: '-2.8s' },
-  { href: '/hobby/', label: 'Hobby', duration: '6.7s', delay: '-3.4s' },
-  { href: '/guides/', label: 'Guides', duration: '6.1s', delay: '-2.1s' },
-  { href: '/news/', label: 'News', duration: '5.8s', delay: '-1.7s' },
-  { href: '/about/', label: 'About', duration: '6.3s', delay: '-0.5s' },
-  { href: '/contact/', label: 'Contact', duration: '5.7s', delay: '-3.9s' },
+  {
+    href: '/blog/',
+    label: 'Blog',
+    duration: '5.5s',
+    delay: '-4.1s',
+    children: [
+      { href: '/reviews/', label: 'Reviews' },
+      { href: '/guides/', label: 'Guides' },
+      { href: '/news/', label: 'News' },
+      { href: '/hobby/', label: 'Hobby' },
+    ],
+  },
+  {
+    href: '/contact/',
+    label: 'Contact',
+    duration: '5.7s',
+    delay: '-3.9s',
+    children: [{ href: '/about/', label: 'About' }],
+  },
 ];
 ---
 
@@ -23,7 +36,7 @@ const links = [
     <nav class="hidden md:block" aria-label="Primary">
       <ul class="flex items-center gap-6 font-pixel text-sm tracking-[0.06em] text-glow-100">
         {links.map((l) => (
-          <li>
+          <li class={l.children ? 'group relative' : undefined}>
             <a
               href={l.href}
               class="witchlight no-underline transition hover:text-violet-300"
@@ -31,6 +44,22 @@ const links = [
             >
               {l.label}
             </a>
+            {l.children && (
+              <ul
+                class="invisible absolute left-1/2 top-full z-30 -translate-x-1/2 pt-3 opacity-0 transition duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100"
+              >
+                <li class="flex flex-col gap-1 rounded-lg border border-void-700/80 bg-void-900/95 p-2 shadow-lg shadow-void-950/60 backdrop-blur-sm">
+                  {l.children.map((c) => (
+                    <a
+                      href={c.href}
+                      class="whitespace-nowrap rounded px-3 py-2 text-sm text-glow-100 no-underline transition hover:bg-violet-500/10 hover:text-violet-300"
+                    >
+                      {c.label}
+                    </a>
+                  ))}
+                </li>
+              </ul>
+            )}
           </li>
         ))}
       </ul>
@@ -66,6 +95,20 @@ const links = [
           >
             {l.label}
           </a>
+          {l.children && (
+            <ul class="flex flex-col gap-1 border-l border-void-700/80 pl-4">
+              {l.children.map((c) => (
+                <li>
+                  <a
+                    href={c.href}
+                    class="block py-2 text-xs text-mist-400 no-underline transition hover:text-violet-300"
+                  >
+                    {c.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
         </li>
       ))}
     </ul>

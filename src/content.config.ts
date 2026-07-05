@@ -1,8 +1,15 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
+// Posts may be nested in subfolders (e.g. grouped by series) purely for
+// organization — the id is always just the leaf slug, so URLs are unaffected
+// by how deep a post file lives.
 const stripIndex = ({ entry }: { entry: string }) =>
-  entry.replace(/\/index\.(md|mdx)$/i, '').replace(/\.(md|mdx)$/i, '');
+  entry
+    .replace(/\/index\.(md|mdx)$/i, '')
+    .replace(/\.(md|mdx)$/i, '')
+    .split('/')
+    .pop()!;
 
 const posts = defineCollection({
   loader: glob({
@@ -36,6 +43,10 @@ const posts = defineCollection({
         // Series grouping — matches the id of a series collection entry
         series: z.string().optional(),
         episode: z.number().int().optional(),
+
+        // For type: 'stories' — a standalone character vignette vs. a
+        // narrative write-up dramatizing an actual play session
+        storyKind: z.enum(['vignette', 'chapter']).optional(),
 
         // Narrative ↔ Live Play cross-links (IDs of source live-play posts)
         sourceSessions: z.array(z.string()).optional(),

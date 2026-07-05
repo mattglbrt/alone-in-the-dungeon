@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import type { Post } from '../utils/collections';
 import {
   TYPE_LABELS,
+  STORY_KIND_LABELS,
   FORMAT_LABELS,
   GAME_TYPE_LABELS,
   formatDate,
@@ -16,11 +17,12 @@ interface Props {
 const { post, eager = false } = Astro.props;
 const { data } = post;
 const isVideo = data.format === 'video';
+const typeLabel = data.storyKind ? STORY_KIND_LABELS[data.storyKind] : TYPE_LABELS[data.type];
 const youtubeThumbnail =
   isVideo && data.youtubeId ? `https://i.ytimg.com/vi/${data.youtubeId}/hqdefault.jpg` : null;
 ---
 
-<a href={postUrl(post)} class="rune-card group flex flex-col overflow-hidden no-underline">
+<a href={postUrl(post)} class="rune-card group flex h-full flex-col overflow-hidden no-underline">
   {data.heroImage ? (
     <div class="relative overflow-hidden">
       <Image
@@ -75,7 +77,7 @@ const youtubeThumbnail =
   <div class="flex flex-1 flex-col p-5">
     <div class="mb-3 flex flex-wrap items-center gap-2 font-sans text-[0.62rem] uppercase tracking-[0.2em]">
       <span class="rounded-full border border-violet-600/50 px-2 py-0.5 text-violet-300">
-        {TYPE_LABELS[data.type]}
+        {typeLabel}
       </span>
       {data.gameType && (
         <span class="text-mist-500">{GAME_TYPE_LABELS[data.gameType]}</span>

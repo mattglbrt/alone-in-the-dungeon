@@ -7,12 +7,15 @@ import ReadingTime from '../components/ReadingTime.astro';
 import type { Post } from '../utils/collections';
 import {
   TYPE_LABELS,
+  STORY_KIND_LABELS,
   GAME_TYPE_LABELS,
   FORMAT_LABELS,
   STATUS_LABELS,
   typeBasePath,
   tagToLabel,
   formatDate,
+  postUrl,
+  getNarrativeVersions,
 } from '../utils/collections';
 
 interface Props {
@@ -22,8 +25,17 @@ interface Props {
 const { post, readingTime } = Astro.props;
 const { data } = post;
 
-const typeLabel = TYPE_LABELS[data.type];
+const typeLabel = data.storyKind ? STORY_KIND_LABELS[data.storyKind] : TYPE_LABELS[data.type];
 const typePath = typeBasePath(data.type);
+
+// Chapters dramatizing live-play sessions: fetch the source posts for cross-linking
+const sourcePosts = data.sourceSessions?.length
+  ? await getCollection('posts', (p) => data.sourceSessions!.includes(p.id))
+  : [];
+
+// Live-play posts: fetch any narrative chapters that dramatize this session
+const narrativeVersions =
+  data.type === 'live-play' ? await getNarrativeVersions(post.id) : [];
 
 const ogImage = data.heroImage
   ? data.heroImage.src
@@ -125,6 +137,46 @@ const breadcrumbData = {
 
       <OrnamentalDivider class="mx-auto mt-10 w-44 text-violet-500" />
     </header>
+
+    {sourcePosts.length > 0 && (
+      <div class="mx-auto max-w-[var(--container-prose)] px-6 mb-10">
+        <div class="rounded border border-void-700 bg-void-900/50 px-6 py-5 text-center">
+          <p class="font-sans text-[0.62rem] uppercase tracking-[0.24em] text-violet-300">
+            Dramatizes
+          </p>
+          <div class="mt-2 flex flex-wrap justify-center gap-x-2 gap-y-1">
+            {sourcePosts.map((s) => (
+              <a
+                href={postUrl(s)}
+                class="font-pixel text-sm text-glow-50 no-underline hover:text-violet-300"
+              >
+                {s.data.title} →
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    )}
+
+    {narrativeVersions.length > 0 && (
+      <div class="mx-auto max-w-[var(--container-prose)] px-6 mb-10">
+        <div class="rounded border border-void-700 bg-void-900/50 px-6 py-5 text-center">
+          <p class="font-sans text-[0.62rem] uppercase tracking-[0.24em] text-violet-300">
+            Narrative version{narrativeVersions.length > 1 ? 's' : ''} available
+          </p>
+          <div class="mt-2 flex flex-wrap justify-center gap-x-2 gap-y-1">
+            {narrativeVersions.map((s) => (
+              <a
+                href={postUrl(s)}
+                class="font-pixel text-sm text-glow-50 no-underline hover:text-violet-300"
+              >
+                {s.data.title} →
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    )}
 
     {(data.bookAuthor || data.bookYear || data.readingFormat) && (
       <div class="mx-auto max-w-[var(--container-prose)] px-6 mb-10">

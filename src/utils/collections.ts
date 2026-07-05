@@ -27,6 +27,15 @@ export async function getSeriesPosts(seriesSlug: string): Promise<Post[]> {
   return posts.sort((a, b) => (a.data.episode ?? 0) - (b.data.episode ?? 0));
 }
 
+// Narrative posts (type: 'stories') that dramatize a given live-play session
+export async function getNarrativeVersions(sessionId: string): Promise<Post[]> {
+  const posts = await getCollection(
+    'posts',
+    (p) => !p.data.draft && (p.data.sourceSessions ?? []).includes(sessionId),
+  );
+  return posts.sort((a, b) => (a.data.episode ?? 0) - (b.data.episode ?? 0));
+}
+
 export async function getFeaturedPost(posts: Post[]): Promise<Post | undefined> {
   return posts.find((p) => p.data.featured) ?? posts[0];
 }
@@ -94,6 +103,11 @@ export const TYPE_LABELS: Record<PostType, string> = {
   hobby: 'Hobby',
   guides: 'Guide',
   news: 'News',
+};
+
+export const STORY_KIND_LABELS: Record<NonNullable<Post['data']['storyKind']>, string> = {
+  vignette: 'Vignette',
+  chapter: 'Chapter',
 };
 
 export const TYPE_DESCRIPTIONS: Record<PostType, string> = {
