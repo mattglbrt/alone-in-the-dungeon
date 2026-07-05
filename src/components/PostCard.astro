@@ -16,6 +16,8 @@ interface Props {
 const { post, eager = false } = Astro.props;
 const { data } = post;
 const isVideo = data.format === 'video';
+const youtubeThumbnail =
+  isVideo && data.youtubeId ? `https://i.ytimg.com/vi/${data.youtubeId}/hqdefault.jpg` : null;
 ---
 
 <a href={postUrl(post)} class="rune-card group flex flex-col overflow-hidden no-underline">
@@ -39,6 +41,23 @@ const isVideo = data.format === 'video';
           </div>
         </div>
       )}
+    </div>
+  ) : youtubeThumbnail ? (
+    <div class="relative overflow-hidden">
+      <img
+        src={youtubeThumbnail}
+        alt={data.title}
+        loading={eager ? 'eager' : 'lazy'}
+        class="aspect-[5/3] w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+      />
+      <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-void-950/70 to-transparent"></div>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div class="flex h-12 w-12 items-center justify-center rounded-full bg-void-950/70 text-glow-50">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+        </div>
+      </div>
     </div>
   ) : (
     <div class="flex aspect-[5/3] w-full items-center justify-center bg-void-800/60 px-6 text-center">
