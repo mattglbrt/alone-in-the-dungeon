@@ -100,6 +100,7 @@ const websiteSchema = {
                 src={featuredYoutubeThumbnail}
                 alt={featured.data.title}
                 loading="lazy"
+                fetchpriority="low"
                 onerror={`this.onerror=null;this.src='${featuredYoutubeThumbnailFallback}'`}
                 class="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
               />
