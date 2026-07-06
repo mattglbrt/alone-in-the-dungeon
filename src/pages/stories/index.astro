@@ -6,6 +6,14 @@ import { getPostsByType, getSeriesByType, STATUS_LABELS, formatDate } from '../.
 
 const posts = await getPostsByType('stories');
 const allSeries = await getSeriesByType('stories');
+
+const seriesOrder = new Map(allSeries.map((s, i) => [s.id, i]));
+posts.sort((a, b) => {
+  const arcA = seriesOrder.get(a.data.series ?? '') ?? allSeries.length;
+  const arcB = seriesOrder.get(b.data.series ?? '') ?? allSeries.length;
+  if (arcA !== arcB) return arcA - arcB;
+  return (a.data.episode ?? 0) - (b.data.episode ?? 0);
+});
 ---
 
 <BaseLayout
@@ -16,7 +24,7 @@ const allSeries = await getSeriesByType('stories');
     <h1 class="font-pixel text-4xl text-glow-50 md:text-5xl">Stories</h1>
     <p class="mx-auto mt-6 max-w-xl font-reading text-lg italic text-glow-200/90">
       Curated stories drawn from actual play. The pure fiction the dice create,
-      with the mechanics stripped away. Inspired by the tradition of
+      with the mechanics stripped away. Inspired by
       <em>Tales of the Manticore</em>.
     </p>
     <OrnamentalDivider class="mx-auto mt-10 w-44 text-violet-500" />
