@@ -69,13 +69,20 @@ const ogImageIsHero = Boolean(image);
       <script type="application/ld+json" set:html={JSON.stringify(sd)} />
     ))}
 
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q23Q3QK3QM"></script>
+    <!-- Google Analytics: gtag() queues into dataLayer immediately, but the
+         165KB library itself is fetched after window load so it never
+         competes with fonts/critical rendering for mobile bandwidth. -->
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-Q23Q3QK3QM');
+      window.addEventListener('load', () => {
+        const s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-Q23Q3QK3QM';
+        document.head.appendChild(s);
+      });
     </script>
   </head>
   <body class="bg-void-950 text-glow-100">
