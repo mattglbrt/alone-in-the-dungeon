@@ -116,7 +116,7 @@ export const TYPE_DESCRIPTIONS: Record<PostType, string> = {
   review:
     'Honest takes on games, books, and hobby products from a solo perspective.',
   stories:
-    'Curated stories drawn from actual play — the pure fiction the dice create.',
+    'Curated stories drawn from actual play. The pure fiction the dice create.',
   hobby: 'Completed projects and step-by-step guides from the painting desk.',
   guides:
     'Reading lists, Appendix N indexes, and reference guides for solo play.',
