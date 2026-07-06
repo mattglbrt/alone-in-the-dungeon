@@ -48,15 +48,15 @@ const ogImageIsHero = Boolean(image);
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
-    <!-- Preload critical fonts so they land before the first paint.
-         IM Fell English: wordmark + all headings (above fold) — declared with
-         font-display: optional (see global.css) so a slow fetch never causes
-         a visible swap; preloading just improves the odds it's ready in time.
-         Lora: body text. All are self-hosted in /fonts/ for a stable URL. -->
+    <!-- Preload only the LCP-critical font. IM Fell English is the wordmark
+         and every heading, including the H1 that Lighthouse identifies as
+         the LCP element, so it's worth the forced high-priority fetch.
+         font-display: optional (see global.css) means a slow fetch never
+         causes a visible swap anyway. Lora and Inter use font-display: swap
+         and aren't part of the LCP render path, so they're left to load at
+         the browser's normal (lower) priority via the @font-face rule
+         instead of competing for bandwidth as forced preloads. -->
     <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/im-fell-english-latin-400-normal.woff2" />
-    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/lora-latin-wght-normal.woff2" />
-    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/lora-latin-wght-italic.woff2" />
-    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/inter-latin-wght-normal.woff2" />
 
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
