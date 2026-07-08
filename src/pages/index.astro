@@ -131,8 +131,11 @@ const websiteSchema = {
         </a>
       </div>
 
+      {/* No eager cards here: this grid sits below the hero AND the featured
+          card on every viewport, and eager-loading its images starves the
+          featured thumbnail (the LCP element) of bandwidth on mobile. */}
       <div class="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
-        {rest.map((p, i) => <PostCard post={p} eager={i < 3} />)}
+        {rest.map((p) => <PostCard post={p} />)}
       </div>
     </section>
   )}
