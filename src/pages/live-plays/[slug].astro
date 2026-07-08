@@ -1,17 +1,9 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 import PostLayout from '../../layouts/PostLayout.astro';
+import { makePostStaticPaths } from '../../utils/collections';
 
-export async function getStaticPaths() {
-  const posts = await getCollection(
-    'posts',
-    (p) => !p.data.draft && p.data.type === 'live-play',
-  );
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: { post },
-  }));
-}
+export const getStaticPaths = makePostStaticPaths('live-play');
 
 const { post } = Astro.props;
 const { Content, remarkPluginFrontmatter } = await render(post);

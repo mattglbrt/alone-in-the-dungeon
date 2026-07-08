@@ -19,6 +19,21 @@ export async function getPostsByType(type: PostType): Promise<Post[]> {
   return posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 }
 
+// getStaticPaths factory for the per-type [slug] pages, which are otherwise
+// identical across live-plays/stories/reviews/guides/hobby/news
+export function makePostStaticPaths(type: PostType) {
+  return async function getStaticPaths() {
+    const posts = await getCollection(
+      'posts',
+      (p) => !p.data.draft && p.data.type === type,
+    );
+    return posts.map((post) => ({
+      params: { slug: post.id },
+      props: { post },
+    }));
+  };
+}
+
 export async function getSeriesPosts(seriesSlug: string): Promise<Post[]> {
   const posts = await getCollection(
     'posts',
