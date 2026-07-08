@@ -20,7 +20,7 @@ Content lives in `src/content/posts/` (one folder per post, grouped by series) a
 ### Code cleanup
 
 - [x] **Deduplicate the six identical `[slug].astro` pages.** Done: `makePostStaticPaths(type)` in `collections.ts`; each slug page is now a thin wrapper.
-- [ ] **Consolidate `/posts/` and `/blog/`.** Both are filterable all-posts grids with the same filter script; nav only links `/blog/`, so `/posts/` is orphaned. Delete one or make `/posts/` the canonical "everything" page and link it.
+- [x] **Consolidate `/posts/` and `/blog/`.** Done: deleted the orphaned `/posts/` page; `public/_redirects` 301s `/posts/` → `/blog/` on Netlify.
 - [ ] **Extract a `VideoThumb.astro` component.** The YouTube thumbnail markup (maxres/hqdefault fallback, play button overlay) is duplicated between `PostCard.astro` and the featured card in `index.astro`.
 - [ ] **Move the arc/episode sort into `collections.ts`.** The sort added to `stories/index.astro` (by series, then episode) belongs in a shared `sortByArcAndEpisode()` helper for reuse on series pages and future chapter listings.
 
