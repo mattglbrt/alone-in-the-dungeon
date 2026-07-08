@@ -28,9 +28,9 @@ Content lives in `src/content/posts/` (one folder per post, grouped by series) a
 
 Currently 99–100 mobile Lighthouse; these are margin-hunting.
 
-- [ ] **Self-host YouTube thumbnails.** The featured card pulls a 152KB `maxresdefault.jpg` from `i.ytimg.com` — the last third-party render-path asset. Download at build time (or commit as the post's `heroImage`) to get Astro's responsive `<Image>` treatment and fix the OG fallback bug above.
+- [x] ~~**Self-host YouTube thumbnails.**~~ Decided against (2026-07-08): thumbnails stay on i.ytimg.com with `fetchpriority=low`; the OG 404 risk was fixed separately via build-time probing in `utils/youtube.ts`.
 - [x] **Click-to-play facade for YouTube embeds.** Done: `YouTubeEmbed.astro` renders the thumbnail + play button and injects the autoplay iframe on click; no YouTube player JS loads until then.
-- [ ] **Consider dropping Inter.** It's 48KB and only used for tiny uppercase labels — a system-ui stack would be indistinguishable at those sizes and removes a font request from every page.
+- [x] **Consider dropping Inter.** Done: `--font-sans` is the system stack; Inter font-face, woff2 file, and the unused `@fontsource-variable/inter` + `pixelify-sans` packages removed.
 
 ### UX
 

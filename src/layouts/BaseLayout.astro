@@ -52,10 +52,10 @@ const ogImageIsHero = Boolean(image);
          and every heading, including the H1 that Lighthouse identifies as
          the LCP element, so it's worth the forced high-priority fetch.
          font-display: optional (see global.css) means a slow fetch never
-         causes a visible swap anyway. Lora and Inter use font-display: swap
-         and aren't part of the LCP render path, so they're left to load at
-         the browser's normal (lower) priority via the @font-face rule
-         instead of competing for bandwidth as forced preloads. -->
+         causes a visible swap anyway. Lora uses font-display: swap and
+         isn't part of the LCP render path, so it's left to load at the
+         browser's normal (lower) priority via the @font-face rule instead
+         of competing for bandwidth as a forced preload. -->
     <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/im-fell-english-latin-400-normal.woff2" />
 
     <link rel="icon" href="/favicon.ico" sizes="any" />

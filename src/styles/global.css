@@ -1,6 +1,6 @@
-/* Critical fonts: self-hosted in public/fonts/ so preload links resolve immediately,
-   eliminating the @import waterfall. Inter is non-critical (tiny labels only) so
-   it stays as an @import and loads asynchronously.
+/* Fonts: self-hosted in public/fonts/ so preload links resolve immediately,
+   eliminating the @import waterfall. Sans-serif labels use the system stack
+   (they're tiny uppercase strings — no webfont earns its bytes there).
 
    IM Fell English uses font-display: optional rather than swap: it's the
    wordmark/heading face, visible above the fold on every page, so a slow
@@ -33,15 +33,6 @@
   font-display: swap;
   font-weight: 400 700;
   src: url('/fonts/lora-latin-wght-italic.woff2') format('woff2-variations');
-  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
-}
-
-@font-face {
-  font-family: 'Inter Variable';
-  font-style: normal;
-  font-display: swap;
-  font-weight: 100 900;
-  src: url('/fonts/inter-latin-wght-normal.woff2') format('woff2-variations');
   unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
 }
 
@@ -97,7 +88,7 @@
 
   /* Typography */
   --font-pixel: "IM Fell English", Georgia, "Times New Roman", serif;
-  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-reading: "Lora Variable", Georgia, "Times New Roman", serif;
 
   /* Content widths */
