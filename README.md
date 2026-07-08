@@ -37,7 +37,7 @@ Currently 99–100 mobile Lighthouse; these are margin-hunting.
 - [x] **Prev/next episode navigation on posts.** Done: series posts show "← Episode N / Episode N →" cards above the series box in `PostLayout`, driven by `series` + `episode` frontmatter.
 - [ ] **Search.** [Pagefind](https://pagefind.app) is built for static Astro sites — indexes at build time, tiny client bundle, makes transcripts and stories findable. Worth it past ~20 posts.
 - [ ] **Pagination on listing pages.** Everything renders every post today; fine at current count, heavy after a couple of seasons. Astro's `paginate()` makes this straightforward.
-- [ ] **Swap About/Contact in the nav.** "About" is hidden under "Contact"; new visitors deciding whether to stick around look for "What is this?" first. About should be top-level.
+- [x] **Swap About/Contact in the nav.** Done: About is top-level with Contact in its dropdown.
 - [x] **Richer RSS.** Done: full-content items (markdown-it + sanitize-html on post bodies, absolute URLs) via shared `utils/feed.ts`; added `/stories/rss.xml` and a second `rel=alternate` link for feed discovery.
 - [ ] **Newsletter capture.** RSS covers the diehards; email (e.g. Buttondown) is the only owned re-engagement channel.
 
