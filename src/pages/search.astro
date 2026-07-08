@@ -1,0 +1,88 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import OrnamentalDivider from '../components/OrnamentalDivider.astro';
+---
+
+<BaseLayout
+  title="Search"
+  description="Search every live play, story, review, and guide on Alone in the Dungeon."
+>
+  <section class="relative mx-auto max-w-3xl px-6 pt-20 pb-10 text-center">
+    <h1 class="font-pixel text-4xl text-glow-50 md:text-5xl">Search</h1>
+    <p class="mx-auto mt-6 max-w-xl font-reading text-lg italic text-glow-200/90">
+      Scry the archives — every session, story, and review.
+    </p>
+    <OrnamentalDivider class="mx-auto mt-10 w-44 text-violet-500" />
+  </section>
+
+  <section class="relative mx-auto max-w-3xl px-6 pb-24">
+    <div id="search"></div>
+    <noscript>
+      <p class="text-center font-reading italic text-glow-200/70">
+        Search needs JavaScript. The <a href="/tags/">tag index</a> works without it.
+      </p>
+    </noscript>
+  </section>
+</BaseLayout>
+
+<link rel="stylesheet" href="/pagefind/pagefind-ui.css" />
+<script is:inline src="/pagefind/pagefind-ui.js"></script>
+<script is:inline>
+  window.addEventListener('DOMContentLoaded', () => {
+    // Pagefind assets only exist in the built site (`npm run build`);
+    // in `astro dev` this quietly no-ops.
+    if (typeof PagefindUI !== 'undefined') {
+      new PagefindUI({
+        element: '#search',
+        showImages: false,
+        showSubResults: true,
+        autofocus: true,
+      });
+    }
+  });
+</script>
+
+<style is:global>
+  #search {
+    --pagefind-ui-scale: 0.9;
+    --pagefind-ui-primary: var(--color-violet-300);
+    --pagefind-ui-text: var(--color-glow-100);
+    --pagefind-ui-background: var(--color-void-900);
+    --pagefind-ui-border: var(--color-void-700);
+    --pagefind-ui-tag: var(--color-void-700);
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 4px;
+    --pagefind-ui-font: var(--font-sans);
+  }
+  #search .pagefind-ui__search-input {
+    background: var(--color-void-900);
+    color: var(--color-glow-50);
+  }
+  #search .pagefind-ui__search-input::placeholder {
+    color: var(--color-mist-500);
+    opacity: 1;
+  }
+  #search .pagefind-ui__result-title .pagefind-ui__result-link {
+    font-family: var(--font-pixel);
+    color: var(--color-glow-50);
+  }
+  #search .pagefind-ui__result-title .pagefind-ui__result-link:hover {
+    color: var(--color-violet-300);
+  }
+  #search .pagefind-ui__result-excerpt {
+    font-family: var(--font-reading);
+    color: var(--color-glow-200);
+  }
+  #search .pagefind-ui__result-excerpt mark {
+    background: color-mix(in srgb, var(--color-violet-500) 30%, transparent);
+    color: var(--color-violet-300);
+  }
+  #search .pagefind-ui__message,
+  #search .pagefind-ui__button {
+    color: var(--color-mist-500);
+  }
+  #search .pagefind-ui__button {
+    background: var(--color-void-900);
+    border-color: var(--color-void-700);
+  }
+</style>
