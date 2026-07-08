@@ -1,0 +1,49 @@
+---
+// On-theme prev/next + page-number nav for paginated listings.
+// Renders nothing when there's only one page.
+import type { Page } from 'astro';
+
+interface Props {
+  page: Page<unknown>;
+}
+const { page } = Astro.props;
+const pageCount = Math.ceil(page.total / page.size);
+// Astro's page.url values come without trailing slashes; the site uses them
+const withSlash = (u: string) => (u.endsWith('/') ? u : `${u}/`);
+const base = withSlash(page.url.first ?? page.url.current);
+const pageUrl = (n: number) => (n === 1 ? base : `${base}${n}/`);
+const prevUrl = page.url.prev ? withSlash(page.url.prev) : undefined;
+const nextUrl = page.url.next ? withSlash(page.url.next) : undefined;
+---
+
+{pageCount > 1 && (
+  <nav aria-label="Pagination" class="mt-12 flex items-center justify-center gap-2 font-pixel text-sm">
+    {prevUrl ? (
+      <a href={prevUrl} class="rounded border border-void-700 px-4 py-2 text-violet-300 no-underline transition hover:border-violet-500/60 hover:text-glow-50">
+        ← Prev
+      </a>
+    ) : (
+      <span class="rounded border border-void-800 px-4 py-2 text-void-600" aria-hidden="true">← Prev</span>
+    )}
+
+    {Array.from({ length: pageCount }, (_, i) => i + 1).map((n) =>
+      n === page.currentPage ? (
+        <span aria-current="page" class="rounded border border-violet-400 bg-violet-500/10 px-3.5 py-2 text-violet-200">
+          {n}
+        </span>
+      ) : (
+        <a href={pageUrl(n)} class="rounded border border-void-700 px-3.5 py-2 text-mist-400 no-underline transition hover:border-violet-500/60 hover:text-glow-50">
+          {n}
+        </a>
+      ),
+    )}
+
+    {nextUrl ? (
+      <a href={nextUrl} class="rounded border border-void-700 px-4 py-2 text-violet-300 no-underline transition hover:border-violet-500/60 hover:text-glow-50">
+        Next →
+      </a>
+    ) : (
+      <span class="rounded border border-void-800 px-4 py-2 text-void-600" aria-hidden="true">Next →</span>
+    )}
+  </nav>
+)}

@@ -1,30 +1,42 @@
 ---
+import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
+import Pagination from '../../components/Pagination.astro';
 import OrnamentalDivider from '../../components/OrnamentalDivider.astro';
-import { getPostsByType, getSeriesByType, getSeriesPostCounts, seriesCountLabel, STATUS_LABELS, formatDate } from '../../utils/collections';
+import { getPostsByType, getSeriesByType, getSeriesPostCounts, seriesCountLabel, sortByArcAndEpisode, STATUS_LABELS, formatDate } from '../../utils/collections';
 
-const posts = await getPostsByType('live-play');
-const allSeries = await getSeriesByType('live-play');
+export const getStaticPaths = (async ({ paginate }) => {
+  const allSeries = await getSeriesByType('stories');
+  const posts = sortByArcAndEpisode(await getPostsByType('stories'), allSeries);
+  return paginate(posts, { pageSize: 12 });
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+const posts = page.data;
+const isFirstPage = page.currentPage === 1;
+
+const allSeries = await getSeriesByType('stories');
 const counts = await getSeriesPostCounts();
 ---
 
 <BaseLayout
-  title="Live Plays"
-  description="Actual plays and raw recordings of my gaming sessions. Start here if you want to see how a game actually plays or curious about my process."
+  title={isFirstPage ? 'Stories' : `Stories — Page ${page.currentPage}`}
+  description="The stories derived from my actual plays. The emergent stories that the dice create, with the game mechanics stripped away."
 >
   <section class="relative mx-auto max-w-3xl px-6 pt-20 pb-10 text-center">
-    <h1 class="font-pixel text-4xl text-glow-50 md:text-5xl">Live Plays</h1>
+    <h1 class="font-pixel text-4xl text-glow-50 md:text-5xl">Stories</h1>
     <p class="mx-auto mt-6 max-w-xl font-reading text-lg italic text-glow-200/90">
-      Raw recordings and recaps from the table — solo wargames, tabletop RPGs, and everything
-      in between. Nothing fudged. Nothing safe.
+      Curated stories drawn from actual play. The pure fiction the dice create,
+      with the mechanics stripped away. Inspired by
+      <em>Tales of the Manticore</em>.
     </p>
     <OrnamentalDivider class="mx-auto mt-10 w-44 text-violet-500" />
   </section>
 
-  {allSeries.length > 0 && (
+  {isFirstPage && allSeries.length > 0 && (
     <section class="relative mx-auto max-w-5xl px-6 pb-16">
-      <h2 class="heading-rule-left mb-8 font-pixel text-xl text-glow-50">Campaigns</h2>
+      <h2 class="heading-rule-left mb-8 font-pixel text-xl text-glow-50">Story Collections</h2>
       <div class="grid gap-6 md:grid-cols-2">
         {allSeries.map((s) => (
           <a
@@ -46,7 +58,7 @@ const counts = await getSeriesPostCounts();
               {s.data.description}
             </p>
             <p class="mt-4 font-pixel text-xs text-violet-300">
-              View all episodes →
+              Read the collection →
             </p>
           </a>
         ))}
@@ -57,16 +69,17 @@ const counts = await getSeriesPostCounts();
   {posts.length > 0 ? (
     <section class="relative mx-auto max-w-6xl px-6 pb-24">
       {allSeries.length > 0 && (
-        <h2 class="heading-rule-left mb-8 font-pixel text-xl text-glow-50">All Sessions</h2>
+        <h2 class="heading-rule-left mb-8 font-pixel text-xl text-glow-50">All Stories</h2>
       )}
       <div class="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
         {posts.map((p, i) => <PostCard post={p} eager={i < 3} />)}
       </div>
+      <Pagination page={page} />
     </section>
   ) : (
     <section class="mx-auto max-w-2xl px-6 pb-24 text-center">
       <p class="font-reading text-lg italic text-glow-200/70">
-        No sessions recorded yet. The table is set.
+        No stories yet. The dice have not spoken.
       </p>
     </section>
   )}

@@ -36,7 +36,7 @@ Currently 99–100 mobile Lighthouse; these are margin-hunting.
 
 - [x] **Prev/next episode navigation on posts.** Done: series posts show "← Episode N / Episode N →" cards above the series box in `PostLayout`, driven by `series` + `episode` frontmatter.
 - [x] **Search.** Done: Pagefind runs post-build (`astro build && pagefind --site dist`); `data-pagefind-body` scopes the index to post content; themed UI at `/search/`, linked in the nav.
-- [ ] **Pagination on listing pages.** Everything renders every post today; fine at current count, heavy after a couple of seasons. Astro's `paginate()` makes this straightforward.
+- [x] **Pagination on listing pages.** Done for the two listings that grow with seasons (`/live-plays/`, `/stories/`): `[...page].astro` + `paginate()` at 12/page with an on-theme `Pagination.astro` nav; series sections render on page 1 only. Other type listings can adopt the same pattern when they grow.
 - [x] **Swap About/Contact in the nav.** Done: About is top-level with Contact in its dropdown.
 - [x] **Richer RSS.** Done: full-content items (markdown-it + sanitize-html on post bodies, absolute URLs) via shared `utils/feed.ts`; added `/stories/rss.xml` and a second `rel=alternate` link for feed discovery.
 - [ ] **Newsletter capture.** RSS covers the diehards; email (e.g. Buttondown) is the only owned re-engagement channel.
