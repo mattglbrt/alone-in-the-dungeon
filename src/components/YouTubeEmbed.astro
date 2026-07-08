@@ -2,7 +2,10 @@
 // Click-to-play facade: renders the video thumbnail and a play button,
 // injecting the real YouTube iframe (and its ~1MB of player JS) only on
 // click. autoplay=1 so the click that swaps in the iframe also starts
-// playback.
+// playback. The thumbnail goes through Astro's image service (build-time
+// fetch, local right-sized WebP) like VideoThumb.
+import { Image } from 'astro:assets';
+
 interface Props {
   youtubeId: string;
   title: string;
@@ -18,10 +21,13 @@ const { youtubeId, title, thumbnail } = Astro.props;
   data-video-id={youtubeId}
   data-video-title={title}
 >
-  <img
+  <Image
     src={thumbnail}
     alt=""
-    loading="lazy"
+    inferSize
+    widths={[480, 720, 960, 1280]}
+    sizes="(min-width: 1024px) 896px, 92vw"
+    loading="eager"
     class="absolute inset-0 h-full w-full object-cover"
   />
   <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-void-950/70 to-transparent"></div>
