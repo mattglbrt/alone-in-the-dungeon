@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import OrnamentalDivider from '../components/OrnamentalDivider.astro';
 import ReadingTime from '../components/ReadingTime.astro';
+import YouTubeEmbed from '../components/YouTubeEmbed.astro';
 import type { Post } from '../utils/collections';
 import { resolveYoutubeThumbnail } from '../utils/youtube';
 import {
@@ -39,11 +40,11 @@ const sourcePosts = data.sourceSessions?.length
 const narrativeVersions =
   data.type === 'live-play' ? await getNarrativeVersions(post.id) : [];
 
-const ogImage = data.heroImage
-  ? data.heroImage.src
-  : data.youtubeId
-    ? await resolveYoutubeThumbnail(data.youtubeId)
-    : undefined;
+const youtubeThumbnail = data.youtubeId
+  ? await resolveYoutubeThumbnail(data.youtubeId)
+  : undefined;
+
+const ogImage = data.heroImage ? data.heroImage.src : youtubeThumbnail;
 
 // Fetch series entry for breadcrumb + metadata
 const seriesEntry = data.series
@@ -237,19 +238,14 @@ const breadcrumbData = {
       </div>
     )}
 
-    {/* YouTube embed for video posts */}
-    {data.format === 'video' && data.youtubeId && (
+    {/* YouTube embed for video posts (click-to-play facade) */}
+    {data.format === 'video' && data.youtubeId && youtubeThumbnail && (
       <div class="mx-auto max-w-4xl px-6 mb-10">
-        <div class="relative overflow-hidden rounded-md border border-void-700 aspect-video">
-          <iframe
-            src={`https://www.youtube-nocookie.com/embed/${data.youtubeId}`}
-            title={data.title}
-            loading="lazy"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-            class="absolute inset-0 h-full w-full border-0"
-          ></iframe>
-        </div>
+        <YouTubeEmbed
+          youtubeId={data.youtubeId}
+          title={data.title}
+          thumbnail={youtubeThumbnail}
+        />
       </div>
     )}
 
