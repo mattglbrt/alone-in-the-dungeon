@@ -85,10 +85,14 @@ const websiteSchema = {
               )}
             </div>
           ) : featuredIsVideo && featured.data.youtubeId ? (
+            /* The top of this card sits inside the mobile first viewport
+               (hero is 68vh), so this image regularly IS the LCP element —
+               it must load eagerly at high priority, never lazy/low. */
             <VideoThumb
               youtubeId={featured.data.youtubeId}
               title={featured.data.title}
-              fetchpriority="low"
+              eager={true}
+              fetchpriority="high"
               class="relative aspect-[5/3] overflow-hidden md:aspect-auto"
               imgClass="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
             />

@@ -58,6 +58,11 @@ const ogImageIsHero = Boolean(image);
          of competing for bandwidth as a forced preload. -->
     <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/im-fell-english-latin-400-normal.woff2" />
 
+    <!-- YouTube thumbnails (post cards, featured card, embed facades) all
+         come from i.ytimg.com; warming the connection early matters most on
+         the homepage, where the featured thumbnail can be the LCP element. -->
+    <link rel="preconnect" href="https://i.ytimg.com" />
+
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
