@@ -42,6 +42,7 @@ const thumbnail = await resolveYoutubeThumbnail(youtubeId);
     inferSize
     widths={[320, 480, 720, 960]}
     sizes={sizes}
+    quality={60}
     loading={eager ? 'eager' : 'lazy'}
     fetchpriority={fetchpriority}
     class={imgClass}
