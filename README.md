@@ -26,9 +26,9 @@ Content lives in `src/content/posts/` (one folder per post, grouped by series) a
 
 ### Performance
 
-Currently 99–100 mobile Lighthouse; these are margin-hunting.
+Baseline (2026-07-08, PageSpeed Insights mobile — the ground truth, not local Lighthouse): **98 perf / 100 a11y / 100 best-practices / 100 SEO**, LCP 2.3s. The last ~2 points are deliberate, closed trade-offs: GA4 stays (loads post-onload; its integrations beat ~1 point) and fonts stay as-is (IM Fell headings on first impression beat dropping its preload). Guardrails: the featured homepage thumbnail must stay `eager` + `fetchpriority="high"` (it's the mobile LCP element); homepage grid cards must never be eager.
 
-- [x] ~~**Self-host YouTube thumbnails.**~~ Decided against (2026-07-08): thumbnails stay on i.ytimg.com with `fetchpriority=low`; the OG 404 risk was fixed separately via build-time probing in `utils/youtube.ts`.
+- [x] **Self-host YouTube thumbnails.** Done (2026-07-08, after PSI showed the i.ytimg originals caused a mobile 75): Astro's image service fetches each thumbnail at build (`image.domains` + the maxres/hq probe in `utils/youtube.ts`) and emits responsive local WebP at quality 60. OG tags still use absolute i.ytimg URLs.
 - [x] **Click-to-play facade for YouTube embeds.** Done: `YouTubeEmbed.astro` renders the thumbnail + play button and injects the autoplay iframe on click; no YouTube player JS loads until then.
 - [x] **Consider dropping Inter.** Done: `--font-sans` is the system stack; Inter font-face, woff2 file, and the unused `@fontsource-variable/inter` + `pixelify-sans` packages removed.
 
