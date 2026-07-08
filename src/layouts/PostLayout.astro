@@ -5,6 +5,7 @@ import BaseLayout from './BaseLayout.astro';
 import OrnamentalDivider from '../components/OrnamentalDivider.astro';
 import ReadingTime from '../components/ReadingTime.astro';
 import type { Post } from '../utils/collections';
+import { resolveYoutubeThumbnail } from '../utils/youtube';
 import {
   TYPE_LABELS,
   STORY_KIND_LABELS,
@@ -41,7 +42,7 @@ const narrativeVersions =
 const ogImage = data.heroImage
   ? data.heroImage.src
   : data.youtubeId
-    ? `https://img.youtube.com/vi/${data.youtubeId}/maxresdefault.jpg`
+    ? await resolveYoutubeThumbnail(data.youtubeId)
     : undefined;
 
 // Fetch series entry for breadcrumb + metadata

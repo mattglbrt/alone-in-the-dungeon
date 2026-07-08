@@ -15,7 +15,7 @@ Content lives in `src/content/posts/` (one folder per post, grouped by series) a
 ### Bugs
 
 - [x] **Fix the default OG image 404.** ~~`BaseLayout.astro` falls back to `/og-default.png` but the file in `public/` is `og-default.jpg`.~~ Fixed: new `og-default.png` composed from the Seal of Mercury (seal + site name + tagline on void, 1200×630); old `.jpg`/`.svg` versions removed.
-- [ ] **OG image for video posts can 404.** `PostLayout.astro` uses `img.youtube.com/.../maxresdefault.jpg` for the OG tag, which 404s for videos YouTube never processed at high res. The `<img>` tags have an `onerror` fallback to `hqdefault.jpg`; the OG tag has no fallback. (Self-hosting thumbnails, below, fixes this too.)
+- [x] **OG image for video posts can 404.** Done: `utils/youtube.ts` probes maxresdefault at build time (HEAD request, cached per video) and falls back to the always-available hqdefault for the OG tag.
 
 ### Code cleanup
 
