@@ -14,7 +14,7 @@ Content lives in `src/content/posts/` (one folder per post, grouped by series) a
 
 ### Bugs
 
-- [ ] **Fix the default OG image 404.** `BaseLayout.astro` falls back to `/og-default.png` but the file in `public/` is `og-default.jpg`, so every page without its own image shares a broken social preview. *Waiting on a new OG image (Matt is making one) — then point the fallback at the right file.*
+- [x] **Fix the default OG image 404.** ~~`BaseLayout.astro` falls back to `/og-default.png` but the file in `public/` is `og-default.jpg`.~~ Fixed: new `og-default.png` composed from the Seal of Mercury (seal + site name + tagline on void, 1200×630); old `.jpg`/`.svg` versions removed.
 - [ ] **OG image for video posts can 404.** `PostLayout.astro` uses `img.youtube.com/.../maxresdefault.jpg` for the OG tag, which 404s for videos YouTube never processed at high res. The `<img>` tags have an `onerror` fallback to `hqdefault.jpg`; the OG tag has no fallback. (Self-hosting thumbnails, below, fixes this too.)
 
 ### Code cleanup
