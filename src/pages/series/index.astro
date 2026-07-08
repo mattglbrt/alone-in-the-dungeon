@@ -1,9 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import OrnamentalDivider from '../../components/OrnamentalDivider.astro';
-import { getAllSeries, TYPE_LABELS, STATUS_LABELS, GAME_TYPE_LABELS, formatDate } from '../../utils/collections';
+import { getAllSeries, getSeriesPostCounts, seriesCountLabel, TYPE_LABELS, STATUS_LABELS, GAME_TYPE_LABELS, formatDate } from '../../utils/collections';
 
 const allSeries = await getAllSeries();
+const counts = await getSeriesPostCounts();
 ---
 
 <BaseLayout
@@ -36,6 +37,7 @@ const allSeries = await getAllSeries();
               {s.data.system && (
                 <span class="text-azure-400/80">{s.data.system}</span>
               )}
+              <span class="text-mist-500">{seriesCountLabel(s.data.type, counts.get(s.id) ?? 0)}</span>
               <span class="text-mist-600">{STATUS_LABELS[s.data.status]}</span>
             </div>
             <h2 class="font-pixel text-2xl text-glow-50 transition group-hover:text-violet-300">

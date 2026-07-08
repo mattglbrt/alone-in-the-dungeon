@@ -67,6 +67,25 @@ export async function getFeaturedPost(posts: Post[]): Promise<Post | undefined> 
   return posts.find((p) => p.data.featured) ?? posts[0];
 }
 
+// Published-post count per series id, for "N episodes" labels on cards
+export async function getSeriesPostCounts(): Promise<Map<string, number>> {
+  const posts = await getCollection(
+    'posts',
+    (p) => !p.data.draft && p.data.series != null,
+  );
+  const counts = new Map<string, number>();
+  for (const p of posts) {
+    counts.set(p.data.series!, (counts.get(p.data.series!) ?? 0) + 1);
+  }
+  return counts;
+}
+
+export function seriesCountLabel(type: Series['data']['type'], count: number): string {
+  const noun = { 'live-play': 'episode', stories: 'story', hobby: 'post' }[type];
+  const plural = { 'live-play': 'episodes', stories: 'stories', hobby: 'posts' }[type];
+  return `${count} ${count === 1 ? noun : plural}`;
+}
+
 export async function getAllSeries(): Promise<Series[]> {
   const all = await getCollection('series');
   return all.sort((a, b) => b.data.startDate.valueOf() - a.data.startDate.valueOf());
