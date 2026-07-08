@@ -64,6 +64,7 @@ const ogImageIsHero = Boolean(image);
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#0e0d0b" />
     <link rel="alternate" type="application/rss+xml" title="Alone in the Dungeon" href="/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Alone in the Dungeon — Stories" href="/stories/rss.xml" />
 
     {structuredData && (Array.isArray(structuredData) ? structuredData : [structuredData]).map((sd) => (
       <script type="application/ld+json" set:html={JSON.stringify(sd)} />
