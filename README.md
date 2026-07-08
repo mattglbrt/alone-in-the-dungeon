@@ -43,6 +43,6 @@ Currently 99–100 mobile Lighthouse; these are margin-hunting.
 
 ### Content organization
 
-- [ ] **Elevate "system" into a browsable taxonomy.** Every post already has `system:` frontmatter ("Dolmenwood (OSE)", "Kal Arath") but it's display-only. A `/systems/` index with per-system pages is the natural way a new reader explores — all derivable from existing frontmatter.
+- [x] **Elevate "system" into a browsable taxonomy.** Done: `/systems/` index + per-system pages generated from `system:` frontmatter (`systemToSlug`, `getAllSystemsWithCount`, `getPostsBySystem`); post headers link the system name.
 - [x] **Show episode counts/progress on series cards.** Done: "N episodes / N stories" chip on series cards across `/series/`, `/stories/`, and `/live-plays/` via `getSeriesPostCounts()` + `seriesCountLabel()`.
 - [ ] **Standardize the `type` enum naming if a new type is ever added.** It mixes singular and plural (`review` vs `stories`/`guides`), which forces the `typeBasePath` mapping table. Not worth a breaking rename now.

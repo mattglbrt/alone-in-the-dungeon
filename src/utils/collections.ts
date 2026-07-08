@@ -121,6 +121,44 @@ export function getAllTags(posts: Post[]): string[] {
   return [...tags].sort((a, b) => a.localeCompare(b));
 }
 
+// "Dolmenwood (OSE)" -> "dolmenwood-ose"
+export function systemToSlug(system: string): string {
+  return system
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+export async function getAllSystemsWithCount(): Promise<
+  { slug: string; name: string; count: number }[]
+> {
+  const posts = await getCollection(
+    'posts',
+    (p) => !p.data.draft && p.data.system != null,
+  );
+  const map = new Map<string, { name: string; count: number }>();
+  for (const p of posts) {
+    const slug = systemToSlug(p.data.system!);
+    const entry = map.get(slug);
+    if (entry) entry.count++;
+    else map.set(slug, { name: p.data.system!, count: 1 });
+  }
+  return [...map.entries()]
+    .map(([slug, v]) => ({ slug, ...v }))
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+}
+
+export async function getPostsBySystem(slug: string): Promise<Post[]> {
+  const posts = await getCollection(
+    'posts',
+    (p) =>
+      !p.data.draft &&
+      p.data.system != null &&
+      systemToSlug(p.data.system) === slug,
+  );
+  return posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+}
+
 export function tagToLabel(tag: string): string {
   return tag.replace(/-/g, ' ').replace(/^\w/, (c) => c.toUpperCase());
 }

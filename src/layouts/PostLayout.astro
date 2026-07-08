@@ -15,6 +15,7 @@ import {
   STATUS_LABELS,
   typeBasePath,
   tagToLabel,
+  systemToSlug,
   formatDate,
   postUrl,
   getNarrativeVersions,
@@ -140,8 +141,13 @@ const breadcrumbData = {
       </h1>
 
       {data.system && (
-        <p class="mt-5 font-sans text-sm uppercase tracking-[0.18em] text-azure-400/90">
-          {data.system}
+        <p class="mt-5 font-sans text-sm uppercase tracking-[0.18em]">
+          <a
+            href={`/systems/${systemToSlug(data.system)}/`}
+            class="text-azure-400/90 no-underline transition hover:text-violet-300"
+          >
+            {data.system}
+          </a>
         </p>
       )}
 
