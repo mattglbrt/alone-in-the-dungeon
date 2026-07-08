@@ -34,6 +34,18 @@ export function makePostStaticPaths(type: PostType) {
   };
 }
 
+// Order posts by arc (following the given series order), then by episode
+// within each arc. Posts without a series sort last.
+export function sortByArcAndEpisode(posts: Post[], series: Series[]): Post[] {
+  const seriesOrder = new Map(series.map((s, i) => [s.id, i]));
+  return posts.sort((a, b) => {
+    const arcA = seriesOrder.get(a.data.series ?? '') ?? series.length;
+    const arcB = seriesOrder.get(b.data.series ?? '') ?? series.length;
+    if (arcA !== arcB) return arcA - arcB;
+    return (a.data.episode ?? 0) - (b.data.episode ?? 0);
+  });
+}
+
 export async function getSeriesPosts(seriesSlug: string): Promise<Post[]> {
   const posts = await getCollection(
     'posts',
