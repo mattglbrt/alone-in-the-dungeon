@@ -16,6 +16,7 @@ import {
   formatDate,
   postUrl,
   getNarrativeVersions,
+  getSeriesPosts,
 } from '../utils/collections';
 
 interface Props {
@@ -47,6 +48,21 @@ const ogImage = data.heroImage
 const seriesEntry = data.series
   ? (await getCollection('series')).find((s) => s.id === data.series)
   : undefined;
+
+// Prev/next within the series, in episode order
+let prevPost: Post | undefined;
+let nextPost: Post | undefined;
+if (data.series) {
+  const siblings = await getSeriesPosts(data.series);
+  const idx = siblings.findIndex((p) => p.id === post.id);
+  if (idx !== -1) {
+    prevPost = siblings[idx - 1];
+    nextPost = siblings[idx + 1];
+  }
+}
+
+const episodeLabel = (p: Post, fallback: string) =>
+  p.data.episode != null ? `Episode ${p.data.episode}` : fallback;
 
 const structuredData: Record<string, unknown> = {
   '@context': 'https://schema.org',
@@ -267,6 +283,36 @@ const breadcrumbData = {
           ))}
         </div>
       </div>
+    )}
+
+    <!-- Prev/next within the series -->
+    {(prevPost || nextPost) && (
+      <nav aria-label="Series navigation" class="mx-auto max-w-[var(--container-prose)] px-6 pb-10">
+        <div class="grid gap-4 sm:grid-cols-2">
+          {prevPost ? (
+            <a href={postUrl(prevPost)} class="rune-card group block p-5 no-underline">
+              <p class="font-sans text-[0.62rem] uppercase tracking-[0.24em] text-mist-500">
+                ← {episodeLabel(prevPost, 'Previous')}
+              </p>
+              <p class="mt-2 font-pixel text-base text-glow-50 transition group-hover:text-violet-300">
+                {prevPost.data.title}
+              </p>
+            </a>
+          ) : (
+            <div class="hidden sm:block" aria-hidden="true"></div>
+          )}
+          {nextPost && (
+            <a href={postUrl(nextPost)} class="rune-card group block p-5 no-underline sm:text-right">
+              <p class="font-sans text-[0.62rem] uppercase tracking-[0.24em] text-mist-500">
+                {episodeLabel(nextPost, 'Next')} →
+              </p>
+              <p class="mt-2 font-pixel text-base text-glow-50 transition group-hover:text-violet-300">
+                {nextPost.data.title}
+              </p>
+            </a>
+          )}
+        </div>
+      </nav>
     )}
 
     <!-- Series nav -->

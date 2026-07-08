@@ -34,7 +34,7 @@ Currently 99–100 mobile Lighthouse; these are margin-hunting.
 
 ### UX
 
-- [ ] **Prev/next episode navigation on posts.** Biggest gap for a serialized site: from a mid-series episode there's no way to reach the next one except backing out to the series page. `series` + `episode` frontmatter already support a "← Episode 1 | Episode 3 →" footer nav in `PostLayout`.
+- [x] **Prev/next episode navigation on posts.** Done: series posts show "← Episode N / Episode N →" cards above the series box in `PostLayout`, driven by `series` + `episode` frontmatter.
 - [ ] **Search.** [Pagefind](https://pagefind.app) is built for static Astro sites — indexes at build time, tiny client bundle, makes transcripts and stories findable. Worth it past ~20 posts.
 - [ ] **Pagination on listing pages.** Everything renders every post today; fine at current count, heavy after a couple of seasons. Astro's `paginate()` makes this straightforward.
 - [ ] **Swap About/Contact in the nav.** "About" is hidden under "Contact"; new visitors deciding whether to stick around look for "What is this?" first. About should be top-level.
