@@ -1,0 +1,48 @@
+---
+// YouTube thumbnail with play-button overlay for video posts without a
+// committed heroImage.
+//
+// maxresdefault is the true 16:9 frame; hqdefault/sddefault are 4:3 and
+// letterbox 16:9 videos with black bars. maxresdefault 404s for videos
+// that were never processed at high resolution, so fall back on error.
+interface Props {
+  youtubeId: string;
+  title: string;
+  eager?: boolean;
+  fetchpriority?: 'high' | 'low' | 'auto';
+  /** classes for the wrapping div (positioning/aspect) */
+  class?: string;
+  /** classes for the <img> itself */
+  imgClass?: string;
+}
+const {
+  youtubeId,
+  title,
+  eager = false,
+  fetchpriority,
+  class: className = 'relative overflow-hidden',
+  imgClass = 'aspect-[5/3] w-full object-cover transition duration-500 group-hover:scale-[1.03]',
+} = Astro.props;
+
+const thumbnail = `https://i.ytimg.com/vi/${youtubeId}/maxresdefault.jpg`;
+const fallback = `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`;
+---
+
+<div class={className}>
+  <img
+    src={thumbnail}
+    alt={title}
+    loading={eager ? 'eager' : 'lazy'}
+    fetchpriority={fetchpriority}
+    onerror={`this.onerror=null;this.src='${fallback}'`}
+    class={imgClass}
+  />
+  <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-void-950/70 to-transparent"></div>
+  <div class="absolute inset-0 flex items-center justify-center">
+    <div class="flex h-12 w-12 items-center justify-center rounded-full bg-void-950/70 text-glow-50">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M8 5v14l11-7z"/>
+      </svg>
+    </div>
+  </div>
+</div>

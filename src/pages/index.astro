@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
+import VideoThumb from '../components/VideoThumb.astro';
 import OrnamentalDivider from '../components/OrnamentalDivider.astro';
 import { getPublishedPosts, getFeaturedPost, postUrl } from '../utils/collections';
 
@@ -9,18 +10,7 @@ const posts = await getPublishedPosts();
 const featured = await getFeaturedPost(posts);
 const rest = posts.filter((p) => p.id !== featured?.id).slice(0, 6);
 
-// maxresdefault is the true 16:9 frame; hqdefault/sddefault are 4:3 and
-// letterbox 16:9 videos with black bars. maxresdefault 404s for videos
-// that were never processed at high resolution, so fall back on error.
 const featuredIsVideo = featured?.data.format === 'video';
-const featuredYoutubeThumbnail =
-  featuredIsVideo && featured?.data.youtubeId
-    ? `https://i.ytimg.com/vi/${featured.data.youtubeId}/maxresdefault.jpg`
-    : null;
-const featuredYoutubeThumbnailFallback =
-  featuredIsVideo && featured?.data.youtubeId
-    ? `https://i.ytimg.com/vi/${featured.data.youtubeId}/hqdefault.jpg`
-    : null;
 
 const websiteSchema = {
   '@context': 'https://schema.org',
@@ -94,25 +84,14 @@ const websiteSchema = {
                 </div>
               )}
             </div>
-          ) : featuredYoutubeThumbnail ? (
-            <div class="relative aspect-[5/3] overflow-hidden md:aspect-auto">
-              <img
-                src={featuredYoutubeThumbnail}
-                alt={featured.data.title}
-                loading="lazy"
-                fetchpriority="low"
-                onerror={`this.onerror=null;this.src='${featuredYoutubeThumbnailFallback}'`}
-                class="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
-              />
-              <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-void-950/70 to-transparent"></div>
-              <div class="absolute inset-0 flex items-center justify-center">
-                <div class="flex h-12 w-12 items-center justify-center rounded-full bg-void-950/70 text-glow-50">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M8 5v14l11-7z"/>
-                  </svg>
-                </div>
-              </div>
-            </div>
+          ) : featuredIsVideo && featured.data.youtubeId ? (
+            <VideoThumb
+              youtubeId={featured.data.youtubeId}
+              title={featured.data.title}
+              fetchpriority="low"
+              class="relative aspect-[5/3] overflow-hidden md:aspect-auto"
+              imgClass="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+            />
           ) : (
             <div class="flex min-h-[200px] items-center justify-center bg-void-800/50 md:min-h-[260px]">
               <span class="px-8 text-center font-pixel text-xl text-violet-300/90 md:text-2xl">
