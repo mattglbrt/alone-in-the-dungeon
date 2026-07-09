@@ -5,6 +5,8 @@ import BaseLayout from './BaseLayout.astro';
 import OrnamentalDivider from '../components/OrnamentalDivider.astro';
 import ReadingTime from '../components/ReadingTime.astro';
 import YouTubeEmbed from '../components/YouTubeEmbed.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import type { MarkdownHeading } from 'astro';
 import type { Post } from '../utils/collections';
 import { resolveYoutubeThumbnail } from '../utils/youtube';
 import {
@@ -25,8 +27,9 @@ import {
 interface Props {
   post: Post;
   readingTime?: number;
+  headings?: MarkdownHeading[];
 }
-const { post, readingTime } = Astro.props;
+const { post, readingTime, headings = [] } = Astro.props;
 const { data } = post;
 
 const typeLabel = data.storyKind ? STORY_KIND_LABELS[data.storyKind] : TYPE_LABELS[data.type];
@@ -269,6 +272,8 @@ const breadcrumbData = {
         </div>
       </div>
     )}
+
+    <TableOfContents headings={headings} />
 
     <!-- Body -->
     <div class="prose-body mx-auto max-w-[var(--container-prose)] px-6 py-14">

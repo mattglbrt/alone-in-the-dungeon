@@ -6,10 +6,10 @@ import { makePostStaticPaths } from '../../utils/collections';
 export const getStaticPaths = makePostStaticPaths('review');
 
 const { post } = Astro.props;
-const { Content, remarkPluginFrontmatter } = await render(post);
+const { Content, headings, remarkPluginFrontmatter } = await render(post);
 const readingTime = remarkPluginFrontmatter?.readingTime as number | undefined;
 ---
 
-<PostLayout post={post} readingTime={readingTime}>
+<PostLayout post={post} readingTime={readingTime} headings={headings}>
   <Content />
 </PostLayout>

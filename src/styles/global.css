@@ -115,6 +115,18 @@
     text-rendering: optimizeLegibility;
   }
 
+  /* Smooth in-page jumps (table of contents) with breathing room above
+     the target heading; instant for reduced-motion users */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  h2[id], h3[id], h4[id] {
+    scroll-margin-top: 1.5rem;
+  }
+
   body {
     min-height: 100vh;
   }
