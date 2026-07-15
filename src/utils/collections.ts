@@ -20,7 +20,7 @@ export async function getPostsByType(type: PostType): Promise<Post[]> {
 }
 
 // getStaticPaths factory for the per-type [slug] pages, which are otherwise
-// identical across live-plays/stories/reviews/guides/hobby/news
+// identical across live-plays/stories/reviews/guides/hobby
 export function makePostStaticPaths(type: PostType) {
   return async function getStaticPaths() {
     const posts = await getCollection(
@@ -171,7 +171,6 @@ export function typeBasePath(type: PostType): string {
     stories: '/stories',
     hobby: '/hobby',
     guides: '/guides',
-    news: '/news',
   };
   return map[type];
 }
@@ -186,7 +185,6 @@ export const TYPE_LABELS: Record<PostType, string> = {
   stories: 'Stories',
   hobby: 'Hobby',
   guides: 'Guide',
-  news: 'News',
 };
 
 export const STORY_KIND_LABELS: Record<NonNullable<Post['data']['storyKind']>, string> = {
@@ -204,7 +202,6 @@ export const TYPE_DESCRIPTIONS: Record<PostType, string> = {
   hobby: 'Completed projects and step-by-step guides from the painting desk.',
   guides:
     'Reading lists, Appendix N indexes, and reference guides for solo play.',
-  news: 'Industry news, releases, jams, and other cool things worth a look.',
 };
 
 export const GAME_TYPE_LABELS: Record<string, string> = {

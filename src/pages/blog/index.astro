@@ -4,7 +4,7 @@ import PostCard from '../../components/PostCard.astro';
 import OrnamentalDivider from '../../components/OrnamentalDivider.astro';
 import { getPublishedPosts } from '../../utils/collections';
 
-const blogTypes = ['review', 'guides', 'news', 'hobby'] as const;
+const blogTypes = ['review', 'guides', 'hobby'] as const;
 
 const allPosts = await getPublishedPosts();
 const posts = allPosts.filter((p) => blogTypes.includes(p.data.type as (typeof blogTypes)[number]));
@@ -13,19 +13,18 @@ const filters = [
   { key: 'all', label: 'All' },
   { key: 'review', label: 'Reviews' },
   { key: 'guides', label: 'Guides' },
-  { key: 'news', label: 'News' },
   { key: 'hobby', label: 'Hobby' },
 ];
 ---
 
 <BaseLayout
   title="Blog"
-  description="Reviews, guides, news, and hobby posts from Alone in the Dungeon."
+  description="Reviews, guides, and hobby posts from Alone in the Dungeon."
 >
   <section class="relative mx-auto max-w-3xl px-6 pt-20 pb-10 text-center">
     <h1 class="font-pixel text-4xl text-glow-50 md:text-5xl">Blog</h1>
     <p class="mx-auto mt-6 max-w-xl font-reading text-lg italic text-glow-200/90">
-      Reviews, guides, news, and hobby projects.
+      Reviews, guides, and hobby projects.
     </p>
     <OrnamentalDivider class="mx-auto mt-10 w-44 text-violet-500" />
   </section>

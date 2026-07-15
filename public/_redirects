@@ -1,2 +1,7 @@
 /posts/ /blog/ 301
 /posts /blog/ 301
+
+# News moved to The Hobbinomicon. Slugs match 1:1, so :splat maps old post
+# URLs straight to their new homes; bare /news goes to the new news index.
+/news https://hobbinomicon.com/news/ 301
+/news/* https://hobbinomicon.com/news/:splat 301
