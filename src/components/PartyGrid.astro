@@ -1,0 +1,38 @@
+---
+/*
+  Wrapper for a roster of CharacterCards.
+
+  The prose column is 680px, which would squeeze three stat blocks to ~210px
+  each — unreadable. So the grid breaks out of the column and centres itself
+  against the viewport instead, up to 1100px. On mobile the breakout width
+  collapses back to roughly the prose width on its own, so it degrades to a
+  single column with no extra handling.
+*/
+
+interface Props {
+  heading?: string;
+}
+
+const { heading } = Astro.props;
+---
+
+<section class="party-grid">
+  {heading && (
+    <h2 class="mb-5 text-center font-pixel text-2xl text-glow-50">{heading}</h2>
+  )}
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .party-grid {
+    position: relative;
+    left: 50%;
+    width: min(100vw - 3rem, 1100px);
+    transform: translateX(-50%);
+    /* Beats `.prose-body > * + *` on specificity so the roster gets room to
+       breathe on both sides, not just below. */
+    margin-block: 3.5rem;
+  }
+</style>

@@ -4,6 +4,28 @@ Append-only. **Newest entry first.**
 
 ---
 
+## 2026-07-21 — Session 3 scaffolded; character sheet components built
+
+**What happened.** Created `src/content/posts/shadowdark-season-1/shadowdark-session-3/index.mdx` — frontmatter only, no prose. Then built a pair of components to satisfy session 3's opening obligation (names/stats/backstories for the party, six characters).
+
+**Artifacts.**
+- `src/content/posts/shadowdark-season-1/shadowdark-session-3/index.mdx` — `draft: true`, episode 3, dated 07-21, tags matching sessions 1–2. Body is the party grid with all six characters stubbed (`name="NAME"` + placeholder stats).
+- `src/components/CharacterCard.astro` — one character: archetype eyebrow + level, name, ancestry · class, six stats in two columns, HP pip row + AC, gear, talent. Every field past `name` optional.
+- `src/components/PartyGrid.astro` — roster wrapper, responsive 3/2/1-up.
+
+**Choices made.**
+- **Data-driven cards over photos of the real sheets.** Matt picked this from three options (data cards / photo gallery / hybrid). Real text means Pagefind indexes the stats, it's legible on a phone, and it adds no JS and no images — no cost against the PSI mobile guardrail. Photos of handwritten graph paper would have failed all three.
+- **Grid breaks out of the prose column.** `--container-prose` is 680px, which squeezes three stat blocks to ~210px each. The grid centres against the viewport up to 1100px instead, collapsing to 1-up on mobile on its own.
+- **Modifiers are computed, not typed** — `stats={{ str: 16 }}` renders `16 (+3)` via standard `(score − 10) / 2`. One less typo surface across six characters.
+- **`dead` + `epitaph` props included up front.** Session 2 logged 16 deaths; a gauntlet campaign will want struck-through cards sooner or later.
+- **Kept it system-agnostic** so Kal Arath can reuse it, rather than hardcoding Shadowdark's six stats.
+
+**Verification note.** The first `npm run build` passed but proved nothing — `draft: true` is filtered out of all routes by `utils/collections.ts`, so the components never rendered. Rebuilt with `draft: false` to actually exercise them: 6 `article.rune-card` elements, breakout CSS present (minified to `transform:translate(-50%)`), modifiers correct. Reverted to `draft: true` after.
+
+**Still open.** Never viewed in a browser — the Chrome extension wasn't connected, so verification was rendered-HTML inspection only; spacing and visual balance are unconfirmed. All six characters carry placeholder names and invented stats that need replacing with Matt's real sheets. Nothing committed.
+
+---
+
 ## 2026-07-21 — Shadowdark session 2 ending drafted
 
 **What happened.** Wrote the closing ~30 lines of `src/content/posts/shadowdark-season-1/shadowdark-session-2/index.mdx`, picking up from "a second group scrambles out of the opening behind them" and carrying through to the end of the session. Matt supplied the play beats; I drafted in his voice and he edited the draft afterward.

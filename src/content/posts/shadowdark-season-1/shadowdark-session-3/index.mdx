@@ -1,0 +1,93 @@
+---
+title: 'Shadowdark Live Play Session 3'
+description: Session 3 of my solo Shadowdark campaign.
+date: 2026-07-21
+type: live-play
+format: text
+gameType: tabletop-rpg
+system: Shadowdark
+series: shadowdark-season-1
+episode: 3
+tags: ['shadowdark', 'arcane-library', 'solo-rpg', 'Cry-of-the-Stingbat', 'Runehammer']
+draft: true
+---
+
+import PartyGrid from '../../../../components/PartyGrid.astro';
+import CharacterCard from '../../../../components/CharacterCard.astro';
+
+<PartyGrid heading="The Party">
+  <CharacterCard
+    name="NAME"
+    title="The Half-Orc"
+    ancestry="Half-Orc"
+    charClass="Fighter"
+    level={1}
+    stats={{ str: 16, dex: 11, con: 14, int: 9, wis: 12, cha: 8 }}
+    hp={7}
+    maxHp={7}
+    ac={13}
+    gear={['club', 'shortbow', 'ritual dagger']}
+    talent="+1 to melee damage"
+  />
+  <CharacterCard
+    name="NAME"
+    title="The Halfling"
+    ancestry="Halfling"
+    charClass="Thief"
+    level={1}
+    stats={{ str: 8, dex: 16, con: 10, int: 12, wis: 11, cha: 13 }}
+    hp={5}
+    maxHp={5}
+    ac={12}
+    gear={['mirror', 'torch', 'pole']}
+    talent="Stealthy once per day"
+  />
+  <CharacterCard
+    name="NAME"
+    title="The Goblin"
+    ancestry="Goblin"
+    charClass="Ranger"
+    level={1}
+    stats={{ str: 10, dex: 15, con: 12, int: 11, wis: 14, cha: 9 }}
+    hp={6}
+    maxHp={6}
+    ac={12}
+    gear={['shortbow', 'rope', 'iron spike']}
+  />
+  <CharacterCard
+    name="NAME"
+    title="The Human"
+    ancestry="Human"
+    charClass="Priest"
+    level={1}
+    stats={{ str: 11, dex: 10, con: 13, int: 12, wis: 15, cha: 12 }}
+    hp={6}
+    maxHp={6}
+    ac={11}
+    gear={['holy symbol', 'torch']}
+  />
+  <CharacterCard
+    name="NAME"
+    title="The Dwarf"
+    ancestry="Dwarf"
+    charClass="Fighter"
+    level={1}
+    stats={{ str: 14, dex: 9, con: 16, int: 8, wis: 11, cha: 10 }}
+    hp={9}
+    maxHp={9}
+    ac={14}
+    gear={['handaxe', 'shield']}
+  />
+  <CharacterCard
+    name="NAME"
+    title="The Elf"
+    ancestry="Elf"
+    charClass="Wizard"
+    level={1}
+    stats={{ str: 8, dex: 13, con: 9, int: 16, wis: 12, cha: 11 }}
+    hp={4}
+    maxHp={4}
+    ac={11}
+    gear={['dagger', 'spellbook']}
+  />
+</PartyGrid>
