@@ -1,4 +1,34 @@
+# robots.txt for Alone in the Dungeon
+# https://aloneinthedungeon.com
+
 User-agent: *
 Allow: /
 
+# AI crawlers are welcome — the wildcard group above already allows them.
+# Naming them keeps that intent explicit, so a future Disallow under "*"
+# doesn't silently lock them out.
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-User
+User-agent: Claude-SearchBot
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: CCBot
+User-agent: meta-externalagent
+Allow: /
+
+# Note: unlike hobbinomicon's robots.txt this does NOT carry
+# `Disallow: /_astro/`. Google's guidance is to leave CSS/JS crawlable so a
+# page renders fully for mobile-friendliness assessment, and PSI mobile is
+# this site's stated ground truth. Nothing in /_astro/ is private.
+
 Sitemap: https://aloneinthedungeon.com/sitemap-index.xml
+
+# Machine-readable content index for language models (https://llmstxt.org/):
+#   https://aloneinthedungeon.com/llms.txt
+#   https://aloneinthedungeon.com/llms-full.txt
+# Any content page also has a markdown rendering at its URL + ".md".
