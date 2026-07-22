@@ -4,7 +4,16 @@ export type Post = CollectionEntry<'posts'>;
 export type Series = CollectionEntry<'series'>;
 export type PostType = Post['data']['type'];
 
-const isPublished = (p: Post) => p.data.draft !== true;
+/*
+  Drafts are hidden from the built site but visible in `npm run dev`, so a
+  work-in-progress post can be previewed exactly as it will look once live —
+  routes, cards, series nav and all. `import.meta.env.DEV` is true only under
+  the dev server, so production builds are unaffected.
+
+  Note this means `npm run preview` does NOT show drafts: it serves the output
+  of `astro build`, where DEV is false. Use `npm run dev` to preview drafts.
+*/
+const isPublished = (p: Post) => import.meta.env.DEV || p.data.draft !== true;
 
 export async function getPublishedPosts(): Promise<Post[]> {
   const posts = await getCollection('posts', isPublished);
@@ -14,7 +23,7 @@ export async function getPublishedPosts(): Promise<Post[]> {
 export async function getPostsByType(type: PostType): Promise<Post[]> {
   const posts = await getCollection(
     'posts',
-    (p) => !p.data.draft && p.data.type === type,
+    (p) => isPublished(p) && p.data.type === type,
   );
   return posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 }
@@ -25,7 +34,7 @@ export function makePostStaticPaths(type: PostType) {
   return async function getStaticPaths() {
     const posts = await getCollection(
       'posts',
-      (p) => !p.data.draft && p.data.type === type,
+      (p) => isPublished(p) && p.data.type === type,
     );
     return posts.map((post) => ({
       params: { slug: post.id },
@@ -49,7 +58,7 @@ export function sortByArcAndEpisode(posts: Post[], series: Series[]): Post[] {
 export async function getSeriesPosts(seriesSlug: string): Promise<Post[]> {
   const posts = await getCollection(
     'posts',
-    (p) => !p.data.draft && p.data.series === seriesSlug,
+    (p) => isPublished(p) && p.data.series === seriesSlug,
   );
   return posts.sort((a, b) => (a.data.episode ?? 0) - (b.data.episode ?? 0));
 }
@@ -58,7 +67,7 @@ export async function getSeriesPosts(seriesSlug: string): Promise<Post[]> {
 export async function getNarrativeVersions(sessionId: string): Promise<Post[]> {
   const posts = await getCollection(
     'posts',
-    (p) => !p.data.draft && (p.data.sourceSessions ?? []).includes(sessionId),
+    (p) => isPublished(p) && (p.data.sourceSessions ?? []).includes(sessionId),
   );
   return posts.sort((a, b) => (a.data.episode ?? 0) - (b.data.episode ?? 0));
 }
@@ -71,7 +80,7 @@ export async function getFeaturedPost(posts: Post[]): Promise<Post | undefined> 
 export async function getSeriesPostCounts(): Promise<Map<string, number>> {
   const posts = await getCollection(
     'posts',
-    (p) => !p.data.draft && p.data.series != null,
+    (p) => isPublished(p) && p.data.series != null,
   );
   const counts = new Map<string, number>();
   for (const p of posts) {
@@ -99,13 +108,13 @@ export async function getSeriesByType(type: Series['data']['type']): Promise<Ser
 export async function getPostsByTag(tag: string): Promise<Post[]> {
   const posts = await getCollection(
     'posts',
-    (p) => !p.data.draft && p.data.tags.includes(tag),
+    (p) => isPublished(p) && p.data.tags.includes(tag),
   );
   return posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 }
 
 export async function getAllTagsWithCount(): Promise<{ tag: string; count: number }[]> {
-  const posts = await getCollection('posts', (p) => !p.data.draft);
+  const posts = await getCollection('posts', isPublished);
   const counts = new Map<string, number>();
   for (const p of posts) {
     for (const t of p.data.tags) counts.set(t, (counts.get(t) ?? 0) + 1);
@@ -134,7 +143,7 @@ export async function getAllSystemsWithCount(): Promise<
 > {
   const posts = await getCollection(
     'posts',
-    (p) => !p.data.draft && p.data.system != null,
+    (p) => isPublished(p) && p.data.system != null,
   );
   const map = new Map<string, { name: string; count: number }>();
   for (const p of posts) {
@@ -152,7 +161,7 @@ export async function getPostsBySystem(slug: string): Promise<Post[]> {
   const posts = await getCollection(
     'posts',
     (p) =>
-      !p.data.draft &&
+      isPublished(p) &&
       p.data.system != null &&
       systemToSlug(p.data.system) === slug,
   );
