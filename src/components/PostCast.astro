@@ -1,0 +1,81 @@
+---
+/*
+  Who was in this session, and a way to their sheets.
+
+  Full stat cards only render on the newest episode, because a sheet in the
+  characters collection is the character as they stand *now*. On an older
+  episode those numbers would be a lie about who walked into that room, so
+  earlier posts get names and a link instead.
+
+  Either way the link leaves the reader's place in the story, hence the note.
+*/
+
+import PartyGrid from './PartyGrid.astro';
+import CharacterCard from './CharacterCard.astro';
+import type { Character } from '../utils/collections';
+import { characterUrl } from '../utils/collections';
+
+interface Props {
+  characters: Character[];
+  /* True on the newest episode, where the current sheets are accurate. */
+  showSheets?: boolean;
+}
+
+const { characters, showSheets = false } = Astro.props;
+
+const spoilerNote =
+  'Character pages show each sheet as it stands now, so they can give away sessions you have not read yet.';
+---
+
+{characters.length > 0 && (
+  <section class="mx-auto max-w-[var(--container-prose)] px-6 pb-10">
+    <h2 class="font-pixel text-xl text-glow-50">The Cast</h2>
+    <p class="mt-2 font-sans text-xs leading-relaxed text-mist-500">
+      {spoilerNote}
+    </p>
+
+    {showSheets ? (
+      <PartyGrid>
+        {characters.map((c) => (
+          <a
+            href={characterUrl(c)}
+            class="no-underline transition hover:-translate-y-0.5"
+          >
+            <CharacterCard {...c.data.sheet} />
+          </a>
+        ))}
+      </PartyGrid>
+    ) : (
+      <ul class="mt-5 grid list-none grid-cols-2 gap-2 p-0 sm:grid-cols-3">
+        {characters.map((c) => {
+          const { sheet } = c.data;
+          const subtitle = [sheet.ancestry, sheet.charClass]
+            .filter(Boolean)
+            .join(' · ');
+          return (
+            <li class="m-0 p-0">
+              <a
+                href={characterUrl(c)}
+                class="group flex h-full flex-col rounded-md border border-void-700 px-3 py-2 no-underline transition hover:border-violet-500/60"
+              >
+                <span
+                  class:list={[
+                    'font-pixel text-base text-glow-50 transition group-hover:text-violet-200',
+                    sheet.dead && 'line-through decoration-spark-500/70',
+                  ]}
+                >
+                  {sheet.name}
+                </span>
+                {subtitle && (
+                  <span class="font-sans text-[0.68rem] uppercase tracking-[0.12em] text-mist-500">
+                    {subtitle}
+                  </span>
+                )}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    )}
+  </section>
+)}
