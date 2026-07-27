@@ -48,7 +48,8 @@ interface Props {
   /* What the character can do by virtue of what they are — ancestry and class
      features. Distinct from `talent`, which is what they rolled. */
   abilities?: string[];
-  talent?: string;
+  /* A human rolls a second talent, so this takes a list as readily as one. */
+  talent?: string | string[];
   /* Escape hatch for state that is true right now rather than true of the
      character — an unspent token, a condition, a debt. */
   note?: string;
@@ -103,6 +104,8 @@ const showPips = hp != null && maxHp != null && maxHp <= 12;
 
 const subtitle = [ancestry, charClass].filter(Boolean).join(' · ');
 const origin = [background, alignment].filter(Boolean).join(' · ');
+
+const talents = talent == null ? [] : Array.isArray(talent) ? talent : [talent];
 ---
 
 <article
@@ -196,7 +199,7 @@ const origin = [background, alignment].filter(Boolean).join(' · ');
     boons.length > 0 ||
     deity ||
     patron ||
-    talent ||
+    talents.length > 0 ||
     note) && (
     <div class="mt-3 space-y-1.5 border-t border-violet-600/25 pt-3 font-sans text-xs leading-relaxed">
       {gear.length > 0 && (
@@ -223,10 +226,12 @@ const origin = [background, alignment].filter(Boolean).join(' · ');
           <span class="ml-2 text-glow-200/90">{boons.join(' · ')}</span>
         </p>
       )}
-      {talent && (
+      {talents.length > 0 && (
         <p>
-          <span class="uppercase tracking-[0.18em] text-mist-500">Talent</span>
-          <span class="ml-2 text-glow-200/90">{talent}</span>
+          <span class="uppercase tracking-[0.18em] text-mist-500">
+            {talents.length > 1 ? 'Talents' : 'Talent'}
+          </span>
+          <span class="ml-2 text-glow-200/90">{talents.join(' · ')}</span>
         </p>
       )}
       {deity && (
