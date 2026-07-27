@@ -2,6 +2,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 
 export type Post = CollectionEntry<'posts'>;
 export type Series = CollectionEntry<'series'>;
+export type Character = CollectionEntry<'characters'>;
 export type PostType = Post['data']['type'];
 
 /*
@@ -173,6 +174,46 @@ export function tagToLabel(tag: string): string {
 }
 
 // Maps post type to its URL base path (no trailing slash)
+export async function getAllCharacters(): Promise<Character[]> {
+  const characters = await getCollection('characters');
+  return characters.sort(
+    (a, b) =>
+      a.data.order - b.data.order ||
+      a.data.sheet.name.localeCompare(b.data.sheet.name),
+  );
+}
+
+/*
+  Every post that names this character in its `characters` array, newest first.
+  Drafts follow the same dev-only rule as everywhere else, so a character page
+  under `npm run dev` shows the unpublished session they debut in.
+*/
+export async function getCharacterPosts(characterId: string): Promise<Post[]> {
+  const posts = await getCollection(
+    'posts',
+    (p) => isPublished(p) && p.data.characters.includes(characterId),
+  );
+  return posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+}
+
+/*
+  The cast of a single post, in the order the post lists them rather than
+  roster order — a post can lead with whoever it is actually about. Ids with no
+  matching character file are skipped rather than throwing, so a typo costs a
+  missing link and not the build.
+*/
+export async function getPostCharacters(post: Post): Promise<Character[]> {
+  if (post.data.characters.length === 0) return [];
+  const all = await getCollection('characters');
+  return post.data.characters
+    .map((id) => all.find((c) => c.id === id))
+    .filter((c): c is Character => c != null);
+}
+
+export function characterUrl(character: Character): string {
+  return `/characters/${character.id}/`;
+}
+
 export function typeBasePath(type: PostType): string {
   const map: Record<PostType, string> = {
     'live-play': '/live-plays',

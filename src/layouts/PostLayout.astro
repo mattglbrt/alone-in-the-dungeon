@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import OrnamentalDivider from '../components/OrnamentalDivider.astro';
+import CastList from '../components/CastList.astro';
 import ReadingTime from '../components/ReadingTime.astro';
 import YouTubeEmbed from '../components/YouTubeEmbed.astro';
 import TableOfContents from '../components/TableOfContents.astro';
@@ -22,6 +23,7 @@ import {
   postUrl,
   getNarrativeVersions,
   getSeriesPosts,
+  getPostCharacters,
 } from '../utils/collections';
 
 interface Props {
@@ -43,6 +45,8 @@ const sourcePosts = data.sourceSessions?.length
 // Live-play posts: fetch any narrative chapters that dramatize this session
 const narrativeVersions =
   data.type === 'live-play' ? await getNarrativeVersions(post.id) : [];
+
+const cast = await getPostCharacters(post);
 
 const youtubeThumbnail = data.youtubeId
   ? await resolveYoutubeThumbnail(data.youtubeId)
@@ -279,6 +283,9 @@ const breadcrumbData = {
     <div class="prose-body mx-auto max-w-[var(--container-prose)] px-6 py-14">
       <slot />
     </div>
+
+    {/* Who was in it, and a way to their sheets. */}
+    <CastList characters={cast} />
 
     {data.tags.length > 0 && (
       <div class="mx-auto max-w-[var(--container-prose)] px-6 pb-10">

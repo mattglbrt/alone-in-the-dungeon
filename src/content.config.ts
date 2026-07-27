@@ -44,6 +44,11 @@ const posts = defineCollection({
         series: z.string().optional(),
         episode: z.number().int().optional(),
 
+        // Cast — ids of characters collection entries. Declared post-side so
+        // adding a post names its cast once, rather than editing every
+        // character who happened to be there.
+        characters: z.array(z.string()).default([]),
+
         // For type: 'stories' — a standalone character vignette vs. a
         // narrative write-up dramatizing an actual play session
         storyKind: z.enum(['vignette', 'chapter']).optional(),
@@ -108,4 +113,69 @@ const series = defineCollection({
     }),
 });
 
-export const collections = { posts, series };
+// A character sheet as data, plus a backstory in the MDX body. The frontmatter
+// deliberately mirrors CharacterCard's props one-for-one so a page can spread
+// `entry.data.sheet` straight into the component with nothing in between.
+//
+// This holds the character as they stand *now*. A post's own PartyGrid is a
+// snapshot of who they were that session, which is why the two are separate.
+const characters = defineCollection({
+  loader: glob({
+    pattern: '**/*.{md,mdx}',
+    base: './src/content/characters',
+    generateId: stripIndex,
+  }),
+  schema: ({ image }) =>
+    z.object({
+      // Sorting on the roster index; lower comes first.
+      order: z.number().int().default(0),
+      // The campaign they belong to — id of a series entry.
+      series: z.string().optional(),
+      portrait: image().optional(),
+      portraitAlt: z.string().optional(),
+
+      sheet: z.object({
+        name: z.string(),
+        title: z.string().optional(),
+        ancestry: z.string().optional(),
+        charClass: z.string().optional(),
+        level: z.union([z.number(), z.string()]).optional(),
+        background: z.string().optional(),
+        alignment: z.string().optional(),
+        stats: z
+          .object({
+            str: z.number().optional(),
+            dex: z.number().optional(),
+            con: z.number().optional(),
+            int: z.number().optional(),
+            wis: z.number().optional(),
+            cha: z.number().optional(),
+          })
+          .optional(),
+        hp: z.number().optional(),
+        maxHp: z.number().optional(),
+        ac: z.number().optional(),
+        gear: z.array(z.string()).default([]),
+        spells: z.array(z.string()).default([]),
+        abilities: z.array(z.string()).default([]),
+        boons: z.array(z.string()).default([]),
+        deity: z.string().optional(),
+        patron: z.string().optional(),
+        talent: z.union([z.string(), z.array(z.string())]).optional(),
+        note: z.string().optional(),
+        dead: z.boolean().default(false),
+        epitaph: z.string().optional(),
+      }),
+    })
+    .superRefine((data, ctx) => {
+      if (data.portrait && !data.portraitAlt) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['portraitAlt'],
+          message: 'portraitAlt is required when portrait is set',
+        });
+      }
+    }),
+});
+
+export const collections = { posts, series, characters };

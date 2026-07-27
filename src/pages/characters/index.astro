@@ -1,0 +1,87 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CharacterCard from '../../components/CharacterCard.astro';
+import PartyGrid from '../../components/PartyGrid.astro';
+import OrnamentalDivider from '../../components/OrnamentalDivider.astro';
+import { getAllCharacters, characterUrl } from '../../utils/collections';
+
+const characters = await getAllCharacters();
+const allSeries = await getCollection('series');
+
+/* Grouped by campaign, so a second season's roster doesn't pile in with the
+   first. Characters with no series fall into a final unnamed group. */
+const groups = allSeries
+  .map((s) => ({
+    series: s,
+    members: characters.filter((c) => c.data.series === s.id),
+  }))
+  .filter((g) => g.members.length > 0);
+
+const ungrouped = characters.filter(
+  (c) => !allSeries.some((s) => s.id === c.data.series),
+);
+
+const description =
+  'Every character from the campaigns — sheets, backstories, and the sessions they walked into.';
+
+const itemListData = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Characters',
+  description,
+  itemListElement: characters.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: c.data.sheet.name,
+    url: `https://aloneinthedungeon.com${characterUrl(c)}`,
+  })),
+};
+---
+
+<BaseLayout title="Characters" description={description} structuredData={itemListData}>
+  <header class="mx-auto max-w-3xl px-6 pt-16 pb-10 text-center">
+    <h1 class="font-pixel text-4xl leading-tight text-glow-50 md:text-5xl">
+      Characters
+    </h1>
+    <p class="mt-5 font-reading text-lg text-glow-200/80">{description}</p>
+    <OrnamentalDivider class="mx-auto mt-10 w-44 text-violet-500" />
+  </header>
+
+  {characters.length === 0 && (
+    <p class="mx-auto max-w-2xl px-6 pb-24 text-center font-reading text-lg italic text-glow-200/70">
+      Nobody has survived long enough to get a page yet.
+    </p>
+  )}
+
+  {groups.map(({ series, members }) => (
+    <section class="mx-auto max-w-6xl px-6 pb-16">
+      <h2 class="heading-rule-left mb-8 font-pixel text-xl text-glow-50">
+        <a href={`/series/${series.id}/`} class="no-underline hover:text-violet-300 transition">
+          {series.data.title}
+        </a>
+        <span class="ml-3 font-sans text-sm font-normal text-mist-500">({members.length})</span>
+      </h2>
+      <PartyGrid>
+        {members.map((c) => (
+          <a href={characterUrl(c)} class="no-underline transition hover:-translate-y-0.5">
+            <CharacterCard {...c.data.sheet} />
+          </a>
+        ))}
+      </PartyGrid>
+    </section>
+  ))}
+
+  {ungrouped.length > 0 && (
+    <section class="mx-auto max-w-6xl px-6 pb-16">
+      <h2 class="heading-rule-left mb-8 font-pixel text-xl text-glow-50">Others</h2>
+      <PartyGrid>
+        {ungrouped.map((c) => (
+          <a href={characterUrl(c)} class="no-underline transition hover:-translate-y-0.5">
+            <CharacterCard {...c.data.sheet} />
+          </a>
+        ))}
+      </PartyGrid>
+    </section>
+  )}
+</BaseLayout>
