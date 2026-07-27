@@ -74,15 +74,15 @@ const breadcrumbData = {
     <OrnamentalDivider class="mx-auto mt-10 w-44 text-violet-500" />
   </header>
 
-  {/* The sheet, dropped straight in — same component the session posts use. */}
-  <section class="mx-auto max-w-md px-6 pb-4">
-    <CharacterCard {...sheet} />
-  </section>
-
-  {/* Backstory, written in the MDX body. */}
-  <div class="prose-body mx-auto max-w-[var(--container-prose)] px-6 py-10">
+  {/* Backstory, written in the MDX body. Who they are before what they roll. */}
+  <div class="prose-body mx-auto max-w-[var(--container-prose)] px-6 pb-10">
     <Content />
   </div>
+
+  {/* The sheet, dropped straight in — same component the session posts use. */}
+  <section class="mx-auto max-w-md px-6 pb-14">
+    <CharacterCard {...sheet} />
+  </section>
 
   <section class="relative mx-auto max-w-6xl px-6 pb-24">
     <h2 class="heading-rule-left mb-8 font-pixel text-xl text-glow-50">
