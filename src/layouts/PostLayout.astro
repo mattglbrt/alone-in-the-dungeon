@@ -3,7 +3,8 @@ import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import OrnamentalDivider from '../components/OrnamentalDivider.astro';
-import CastList from '../components/CastList.astro';
+import PartyGrid from '../components/PartyGrid.astro';
+import CharacterCard from '../components/CharacterCard.astro';
 import ReadingTime from '../components/ReadingTime.astro';
 import YouTubeEmbed from '../components/YouTubeEmbed.astro';
 import TableOfContents from '../components/TableOfContents.astro';
@@ -24,6 +25,7 @@ import {
   getNarrativeVersions,
   getSeriesPosts,
   getPostCharacters,
+  characterUrl,
 } from '../utils/collections';
 
 interface Props {
@@ -284,8 +286,21 @@ const breadcrumbData = {
       <slot />
     </div>
 
-    {/* Who was in it, and a way to their sheets. */}
-    <CastList characters={cast} />
+    {/* The roster, built from the post's own `characters` list rather than
+        written into the body, so the sheets have exactly one home. Each card
+        is a link to that character's page. */}
+    {cast.length > 0 && (
+      <PartyGrid heading="The Party">
+        {cast.map((c) => (
+          <a
+            href={characterUrl(c)}
+            class="no-underline transition hover:-translate-y-0.5"
+          >
+            <CharacterCard {...c.data.sheet} />
+          </a>
+        ))}
+      </PartyGrid>
+    )}
 
     {data.tags.length > 0 && (
       <div class="mx-auto max-w-[var(--container-prose)] px-6 pb-10">
