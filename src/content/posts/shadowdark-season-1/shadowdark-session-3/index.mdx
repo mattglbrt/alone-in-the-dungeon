@@ -17,77 +17,127 @@ import CharacterCard from '../../../../components/CharacterCard.astro';
 
 <PartyGrid heading="The Party">
   <CharacterCard
-    name="NAME"
-    title="The Half-Orc"
+    name="Tragan"
+    title="Chosen"
     ancestry="Half-Orc"
-    charClass="Fighter"
+    charClass="Warlock"
     level={1}
-    stats={{ str: 16, dex: 11, con: 14, int: 9, wis: 12, cha: 8 }}
-    hp={7}
-    maxHp={7}
-    ac={13}
-    gear={['club', 'shortbow', 'ritual dagger']}
-    talent="+1 to melee damage"
-  />
-  <CharacterCard
-    name="NAME"
-    title="The Halfling"
-    ancestry="Halfling"
-    charClass="Thief"
-    level={1}
-    stats={{ str: 8, dex: 16, con: 10, int: 12, wis: 11, cha: 13 }}
-    hp={5}
-    maxHp={5}
-    ac={12}
-    gear={['mirror', 'torch', 'pole']}
-    talent="Stealthy once per day"
-  />
-  <CharacterCard
-    name="NAME"
-    title="The Goblin"
-    ancestry="Goblin"
-    charClass="Ranger"
-    level={1}
-    stats={{ str: 10, dex: 15, con: 12, int: 11, wis: 14, cha: 9 }}
-    hp={6}
-    maxHp={6}
-    ac={12}
-    gear={['shortbow', 'rope', 'iron spike']}
-  />
-  <CharacterCard
-    name="NAME"
-    title="The Human"
-    ancestry="Human"
-    charClass="Priest"
-    level={1}
-    stats={{ str: 11, dex: 10, con: 13, int: 12, wis: 15, cha: 12 }}
-    hp={6}
-    maxHp={6}
-    ac={11}
-    gear={['holy symbol', 'torch']}
-  />
-  <CharacterCard
-    name="NAME"
-    title="The Dwarf"
-    ancestry="Dwarf"
-    charClass="Fighter"
-    level={1}
-    stats={{ str: 14, dex: 9, con: 16, int: 8, wis: 11, cha: 10 }}
-    hp={9}
-    maxHp={9}
-    ac={14}
-    gear={['handaxe', 'shield']}
-  />
-  <CharacterCard
-    name="NAME"
-    title="The Elf"
-    ancestry="Elf"
-    charClass="Wizard"
-    level={1}
-    stats={{ str: 8, dex: 13, con: 9, int: 16, wis: 12, cha: 11 }}
+    background="Cult Initiate"
+    alignment="Neutral"
+    stats={{ str: 14, dex: 13, con: 12, int: 13, wis: 14, cha: 12 }}
     hp={4}
     maxHp={4}
     ac={11}
-    gear={['dagger', 'spellbook']}
+    gear={['flint & steel', 'torch', 'club', 'rope']}
+    boons={[
+      '1/day: read the mind of a creature you touch, 3 rounds',
+      '+1 XP when he learns a valuable or significant secret',
+    ]}
+    patron="Shune the Vile"
+  />
+  <CharacterCard
+    name="Pinch"
+    title="Robber"
+    ancestry="Halfling"
+    charClass="Thief"
+    level={1}
+    background="Wizard's Apprentice"
+    alignment="Lawful"
+    stats={{ str: 11, dex: 14, con: 8, int: 10, wis: 12, cha: 9 }}
+    hp={1}
+    maxHp={1}
+    ac={12}
+    gear={['10 iron spikes', "60' rope", 'club', 'cracked mirror', 'torch', 'pole']}
+    abilities={[
+      'Stealthy',
+      'Backstab',
+      'Climbing',
+      'Sneak/hiding',
+      'Disguises',
+      'Finding/disabling traps',
+      'Delicate tasks, locks, pickpocketing',
+    ]}
+    talent="+1 melee & ranged attacks"
+    deity="Gede"
+  />
+  <CharacterCard
+    name="Poke"
+    title="Warrior"
+    ancestry="Goblin"
+    charClass="Fighter"
+    level={1}
+    background="Thieves' Guild"
+    alignment="Neutral"
+    stats={{ str: 7, dex: 16, con: 12, int: 14, wis: 12, cha: 10 }}
+    hp={6}
+    maxHp={6}
+    ac={13}
+    gear={[
+      'grappling hook',
+      'flint & steel',
+      'shortbow (7 arrows)',
+      'club',
+      'torch',
+      'dagger',
+    ]}
+    abilities={[
+      'Weapon mastery (bow): +1 attack and damage, plus half level',
+      'Grit (Dexterity): advantage on checks to overcome an opposing force',
+    ]}
+    talent="+1 to melee and ranged attacks"
+    deity="Gede"
+    note="Holding one unspent hero token."
+  />
+  <CharacterCard
+    name="Bram"
+    title="Seeker"
+    ancestry="Human"
+    charClass="Priest"
+    level={1}
+    background="Banished"
+    alignment="Neutral"
+    stats={{ str: 12, dex: 9, con: 11, int: 4, wis: 18, cha: 13 }}
+    hp={4}
+    maxHp={4}
+    ac={9}
+    gear={['bow (5 arrows)', 'club', 'torch', 'caltrops', 'holy symbol']}
+    spells={['Cure Wounds', 'Light']}
+    abilities={['Turn Undead']}
+    talent="+1 to priest spellcasting"
+    deity="Gede"
+  />
+  <CharacterCard
+    name="Morgan"
+    title="Shaman"
+    ancestry="Human"
+    charClass="Witch"
+    level={1}
+    background="Herbalist"
+    alignment="Neutral"
+    stats={{ str: 7, dex: 10, con: 11, int: 10, wis: 8, cha: 15 }}
+    hp={3}
+    maxHp={3}
+    ac={10}
+    gear={['shortbow (5 arrows)', "10' pole", 'crowbar', 'club']}
+    spells={['Eye Bite', 'Cauldron', 'Shadowdance', 'Fog']}
+    abilities={['Familiar']}
+    talent="Advantage to cast Eye Bite"
+    deity="Shune the Vile"
+  />
+  <CharacterCard
+    name="Malchor"
+    title="Shaman"
+    ancestry="Human"
+    charClass="Wizard"
+    level={1}
+    background="Cult Initiate"
+    alignment="Neutral"
+    stats={{ str: 5, dex: 10, con: 13, int: 16, wis: 13, cha: 16 }}
+    hp={4}
+    maxHp={4}
+    ac={10}
+    gear={['club', 'Gold Inlaid Shortsword (reroll 1s, +1 damage)']}
+    spells={['Protection from Evil', 'Sleep', 'Magic Missile']}
+    deity="Shune the Vile"
   />
 </PartyGrid>

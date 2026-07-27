@@ -1,11 +1,14 @@
 ---
 /*
-  A single character sheet, rendered as data rather than a photo of the sheet:
-  the stats stay searchable (Pagefind indexes real text), legible on a phone,
-  and cost nothing in page weight. Designed for Shadowdark-style six-stat
-  characters but nothing here is system-specific — every field past `name`
-  is optional, so a Kal Arath character with no class or gear still renders
-  cleanly.
+  A single Shadowdark character sheet, rendered as data rather than a photo of
+  the sheet: the stats stay searchable (Pagefind indexes real text), legible on
+  a phone, and cost nothing in page weight.
+
+  This one is Shadowdark's, deliberately — six stats, class titles keyed to
+  alignment, priests with deities and warlocks with patrons. Kal Arath gets its
+  own card when it needs one rather than more optional props bolted on here.
+  Every field past `name` is still optional, but that is for characters who are
+  missing pieces, not for other systems.
 */
 
 interface Stats {
@@ -25,12 +28,30 @@ interface Props {
   ancestry?: string;
   charClass?: string;
   level?: number | string;
+  /* Where they came from and where they stand — 'Banished', 'Neutral'. Sits
+     under the ancestry line, since it colours how the character plays more
+     than any stat does. */
+  background?: string;
+  alignment?: string;
   stats?: Stats;
   hp?: number;
   maxHp?: number;
   ac?: number;
   gear?: string[];
+  /* Spells known, and for a priest the god those spells come from. */
+  spells?: string[];
+  deity?: string;
+  /* A warlock serves a patron rather than worships a god, and gets boons for
+     it — same shape as deity/abilities, different words on purpose. */
+  patron?: string;
+  boons?: string[];
+  /* What the character can do by virtue of what they are — ancestry and class
+     features. Distinct from `talent`, which is what they rolled. */
+  abilities?: string[];
   talent?: string;
+  /* Escape hatch for state that is true right now rather than true of the
+     character — an unspent token, a condition, a debt. */
+  note?: string;
   /* Struck through and desaturated — a gauntlet leaves bodies behind. */
   dead?: boolean;
   /* How they died, shown in place of the HP bar when dead. */
@@ -43,12 +64,20 @@ const {
   ancestry,
   charClass,
   level,
+  background,
+  alignment,
   stats,
   hp,
   maxHp,
   ac,
   gear = [],
+  spells = [],
+  deity,
+  patron,
+  boons = [],
+  abilities = [],
   talent,
+  note,
   dead = false,
   epitaph,
 } = Astro.props;
@@ -73,6 +102,7 @@ const hasStats = STAT_ORDER.some(([, v]) => v != null);
 const showPips = hp != null && maxHp != null && maxHp <= 12;
 
 const subtitle = [ancestry, charClass].filter(Boolean).join(' · ');
+const origin = [background, alignment].filter(Boolean).join(' · ');
 ---
 
 <article
@@ -108,6 +138,10 @@ const subtitle = [ancestry, charClass].filter(Boolean).join(' · ');
       <p class="mt-0.5 font-sans text-xs uppercase tracking-[0.14em] text-azure-400/80">
         {subtitle}
       </p>
+    )}
+
+    {origin && (
+      <p class="mt-1 font-sans text-[0.68rem] text-mist-500">{origin}</p>
     )}
   </header>
 
@@ -156,7 +190,14 @@ const subtitle = [ancestry, charClass].filter(Boolean).join(' · ');
     </div>
   )}
 
-  {(gear.length > 0 || talent) && (
+  {(gear.length > 0 ||
+    spells.length > 0 ||
+    abilities.length > 0 ||
+    boons.length > 0 ||
+    deity ||
+    patron ||
+    talent ||
+    note) && (
     <div class="mt-3 space-y-1.5 border-t border-violet-600/25 pt-3 font-sans text-xs leading-relaxed">
       {gear.length > 0 && (
         <p>
@@ -164,11 +205,44 @@ const subtitle = [ancestry, charClass].filter(Boolean).join(' · ');
           <span class="ml-2 text-glow-200/90">{gear.join(' · ')}</span>
         </p>
       )}
+      {spells.length > 0 && (
+        <p>
+          <span class="uppercase tracking-[0.18em] text-mist-500">Spells</span>
+          <span class="ml-2 text-glow-200/90">{spells.join(' · ')}</span>
+        </p>
+      )}
+      {abilities.length > 0 && (
+        <p>
+          <span class="uppercase tracking-[0.18em] text-mist-500">Abilities</span>
+          <span class="ml-2 text-glow-200/90">{abilities.join(' · ')}</span>
+        </p>
+      )}
+      {boons.length > 0 && (
+        <p>
+          <span class="uppercase tracking-[0.18em] text-mist-500">Boons</span>
+          <span class="ml-2 text-glow-200/90">{boons.join(' · ')}</span>
+        </p>
+      )}
       {talent && (
         <p>
           <span class="uppercase tracking-[0.18em] text-mist-500">Talent</span>
           <span class="ml-2 text-glow-200/90">{talent}</span>
         </p>
+      )}
+      {deity && (
+        <p>
+          <span class="uppercase tracking-[0.18em] text-mist-500">Deity</span>
+          <span class="ml-2 text-glow-200/90">{deity}</span>
+        </p>
+      )}
+      {patron && (
+        <p>
+          <span class="uppercase tracking-[0.18em] text-mist-500">Patron</span>
+          <span class="ml-2 text-glow-200/90">{patron}</span>
+        </p>
+      )}
+      {note && (
+        <p class="text-violet-200/85 italic">{note}</p>
       )}
     </div>
   )}
