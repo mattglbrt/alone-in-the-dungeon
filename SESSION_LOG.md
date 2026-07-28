@@ -4,6 +4,68 @@ Append-only. **Newest entry first.**
 
 ---
 
+## 2026-07-27 — Six real character sheets; a characters collection with a page each; cast on every post
+
+Six commits, **all local — nothing pushed.** `main` is ahead of `origin/main` by 6.
+
+The session started as data entry and turned into a feature. Matt read the six Shadowdark sheets in one at a time; each one had fields the card couldn't hold, so `CharacterCard` grew as the party arrived. Then the sheets moved out of the post entirely into their own collection with a page each.
+
+### The party, filled in (`8efda07`, `d71d5d4`)
+
+`NAME` placeholders and invented stats replaced with the real six: **Bram** (Human Priest, Seeker, Gede), **Malchor** (Human Wizard, Shaman, Shune the Vile), **Pinch** (Halfling Thief, Robber, Gede), **Tragan** (Half-Orc Warlock, Chosen, Shune as *patron*), **Poke** (Goblin Fighter, Warrior, Gede), **Morgan** (Human Witch, Shaman, Shune the Vile). Every modifier checked against its score before writing; all 36 matched.
+
+Ancestries and classes shifted off the placeholders freely — Malchor took the Elf Wizard slot as a human, Tragan replaced the Half-Orc *Fighter* as a Warlock, Morgan took the Dwarf Fighter slot as a Human Witch.
+
+### `CharacterCard` grew eight props
+
+`background`, `alignment`, `spells`, `deity`, `abilities`, `patron`, `boons`, `note`, plus `talent` widened to `string | string[]`. All optional, so nothing already rendered broke.
+
+### A characters collection, a page each (`389377d`, `3abe7ca`, `fdd7b04`, `0689020`)
+
+Matt asked for a page per character: current sheet, space for a 3–5 sentence backstory he writes, and a feed of every post they appear in. Built as a content collection whose frontmatter mirrors `CharacterCard`'s props one-for-one, so a page spreads `entry.data.sheet` into the component with nothing in between. Backstory is the MDX body, same split the `series` files already use.
+
+### Decisions
+
+- **Asked about Morgan's missing stat instead of inferring it.** She arrived with five values where six were expected, and every modifier was internally consistent, so the numbers gave no clue which slot was empty. The obvious guess was a trailing omission (missing CHA, the 15 being WIS). The actual gap was **INT, mid-list** — so the 8 is her WIS and the 15 her CHA. Guessing would have put two wrong stats on a card that renders verbatim into the GEO output. The 07-22 entry flagged exactly this risk; this is the first time it was live.
+- **Shadowdark class titles key off alignment**, confirmed across all six (neutral Priest = Seeker, neutral Wizard/Witch = Shaman, lawful Thief = Robber). So `title` carries the real class title rather than the placeholders' "The Half-Orc" ancestry restatement, which the subtitle already says.
+- **`patron` + `boons` are separate fields from `deity`.** A warlock is bound, not worshipping, and "+1 XP for learning a secret" is an earning rule rather than something Tragan can do. Only Tragan uses them; Matt confirmed the other five are all `deity`.
+- **`abilities` split from `talent`** — class and ancestry features apart from what was rolled. Bram's Turn Undead moved out of `spells` into `abilities` once the field existed.
+- **`note` as a general escape hatch** for state true *now* rather than true of the character (Poke's unspent hero token), instead of another bespoke field.
+- **Cards are Shadowdark-only, by Matt's call.** The component's doc comment previously promised Kal Arath as a design goal; corrected. Kal Arath gets its own card rather than more optional props here. **Retires a STATUS open question.**
+- **The collection is the single source of truth.** Session 3's hand-written `<PartyGrid>` was deleted; its file is now frontmatter only. Editing a stat updates the character page, the roster index, and every post the character appears in.
+- **Consequence, and the fix for it:** live data means an old session would print current stats. So **full sheets render only on the newest episode** (`showSheets={!nextPost}` — no next episode in the series means these numbers are still current). Earlier episodes get name + ancestry · class, linked. Session 2 hands the sheets to session 3 automatically on publish, no edit.
+- **Cast declared post-side** (`characters: [...]` in frontmatter), so a new session names who was in it once instead of editing six character files.
+- **"The Cast" carries a spoiler note** on every post: character pages show sheets as they stand now, so they can give away unread sessions. Kept on the newest episode too — the link still travels to a page that will drift ahead of the reader.
+- **No nav link, Matt's call.** Pages are reachable from three published posts, and each character page's breadcrumb links up to `/characters/`, so the roster index isn't stranded.
+- **Committed to `main`** rather than branching, matching every prior commit here; the root CLAUDE.md's batched-merge discipline is scoped to hobbinomicon's build credits. Flagged at the time.
+
+### Campaign canon established
+
+The party's stated cult-purge goal is **a competing cult going after other cults** — not cult-hunters with a hypocrisy problem. So "Cult Initiate · Shune the Vile" printed above the prose is the premise stated up front, not a leak. **Retires a STATUS open question.** Saved to project memory (`shadowdark-s1-rival-cult-premise`).
+
+Roster splits three and three by god: Shune the Vile (Malchor, Tragan, Morgan) against Gede (Bram, Pinch, Poke). Whether that was designed or fell out of the dice is unconfirmed.
+
+Sessions 1–2 cast is **Tragan, Pinch, Poke** — the three who survived the gauntlet. Those posts name nobody, referring to the party by ancestry only, and session 2 has a fourth member who drowned in the swamp and never came out. The other three debut in session 3.
+
+### Artifacts
+
+- `src/content/characters/{bram,malchor,pinch,tragan,poke,morgan}.mdx` — new
+- `src/pages/characters/index.astro`, `src/pages/characters/[slug].astro` — new
+- `src/components/PostCast.astro` — new
+- `src/components/CharacterCard.astro`, `src/content.config.ts`, `src/utils/collections.ts`, `src/layouts/PostLayout.astro` — modified
+- `shadowdark-session-{1,2,3}/index.mdx` — modified (`characters:` added; session 3's inline grid removed)
+- `src/components/CastList.astro` — created then deleted the same session; the linked cards say everything it said and go the same place
+
+### Verification
+
+Production `astro build` clean at every step. Confirmed in `dist`: session 1 names only, session 2 full sheets (newest published, since session 3 is a draft), Tragan/Pinch/Poke each listing 2 sessions in their Appears In feed, Bram/Malchor/Morgan correctly showing the empty state. Under `npm run dev` session 3 becomes newest and takes the sheets, session 2 drops to names, and all six cast links render in declared order. A post with no cast renders nothing extra.
+
+### Still open
+
+Backstories are six placeholder lines. Session 3's file is now frontmatter only — an empty draft whose party renders automatically under whatever gets written.
+
+---
+
 ## 2026-07-22 — GEO port from hobbinomicon; dev-server draft preview; all four commits verified live
 
 Three shipped things, all pushed to `main` and confirmed against the deployed site.
