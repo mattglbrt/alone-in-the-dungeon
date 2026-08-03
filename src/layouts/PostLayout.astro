@@ -265,10 +265,17 @@ const breadcrumbData = {
     {data.heroImage && data.format !== 'video' && (
       <div class="mx-auto max-w-4xl px-6">
         <div class="overflow-hidden rounded-md border border-void-700">
+          {/* This image sits at the top of the post body and IS the mobile LCP
+              element, so it loads eagerly at high priority, never lazy/low.
+              quality 70 because heroes are handheld photos of miniatures where
+              WebP artifacts don't read at all; the default was costing ~18KiB
+              per post for no visible gain. */}
           <Image
             src={data.heroImage}
             alt={data.heroImageAlt ?? data.title}
             loading="eager"
+            fetchpriority="high"
+            quality={70}
             widths={[720, 1080, 1440]}
             sizes="(min-width: 1024px) 896px, 92vw"
             class="block h-auto w-full object-cover"
