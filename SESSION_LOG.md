@@ -4,6 +4,74 @@ Append-only. **Newest entry first.**
 
 ---
 
+## 2026-08-02–03 — First hobby post (Ravenmere Manor as a *player*); hero image perf fix takes the post to 100
+
+Two commits, **both pushed and live**: `d7feb27` (the post) and `cb572a9` (the hero fix).
+
+Matt played *The Tragedy of Ravenmere Manor* as a player with a full group — his first tabletop RPG as a player since 2002, through a paid DM service. He wanted a review plus a spin-off solo campaign with the character he played. He ended up writing the draft himself and handing it over to be edited and filed.
+
+### The orientation was stale
+
+STATUS.md said six commits sat unpushed on `main`. They didn't — `main` was level with `origin/main` at `8c2f342`. The push happened at some point after the 07-27 wrap and the doc never caught up. Nothing was lost; the top-ranked "Next" item was already done.
+
+### It isn't a review, so it isn't filed as one
+
+Matt's draft says outright, in the body, "This isn't really a review of the adventure." The back half is an essay about what Shadowdark did to his buy-it-and-shelve-it cycle. So it went in as **`type: hobby`, the site's first** — `/hobby/` had been building as an empty index until now. The review energy that *is* there is a 10/10 for Rogue Game Masters and the DM (The Warlock), and Matt has flagged a real paid-player review as a future post once he's done a few more sessions.
+
+Structure agreed up front: **two posts**, the second being episode 1 of a new solo series picking up straight out of the manor, not an episode 0.
+
+### Editing pass
+
+Typos stripped, one wall of text broken into nine sentence-case `##` headers, run-ons left alone. The Instagram-to-shelf paragraph is Matt's list, lopsided, untouched — `voice.md` says keep the self-deprecating aside and end small, so "This is a rambling post" stayed in. Zero em-dashes.
+
+### The hero image took the post from 81 to 100
+
+PSI mobile on the new URL came back **81**, LCP **4.3s** against the 2.3s guardrail, with everything else green (FCP 1.6s, TBT 130ms, CLS 0, SI 4.1s). Lighthouse named the hero as the LCP element: 81.0 KiB at the 720w candidate, with 61.2 KiB flagged as oversized-for-display and 17.7 KiB as compression headroom.
+
+Fixed in `PostLayout.astro`, so it covers **every** post hero, not just this one:
+
+- **`fetchpriority="high"`.** The hero was already `loading="eager"` but carried no priority hint, unlike the homepage featured thumbnail which has had one all along. On a post page this image is unambiguously the LCP element.
+- **`quality={70}`.** 720w candidate 81.0 → 63.7 KiB, matching Lighthouse's 17.7 KiB estimate almost exactly.
+
+Re-run: **100 / 100 / 100 / 100**, LCP 1.0s, FCP 1.0s, TBT 10ms, CLS 0, SI 1.5s.
+
+### Decisions
+
+- **Filed `hobby`, not `review`, on the author's own words.** The post names what it is in its second-to-last section; typing it `review` would have put it on `/reviews/` next to the Poul Anderson book review and promised readers something it doesn't deliver.
+- **Pointed at someone else's review instead of faking one.** Matt supplied [2d6 Stingbats' review](https://2d6stingbats.com/2026/07/03/review-the-tragedy-of-ravenmere-manor/); it sits directly after the "this isn't really a review" line, which is where a reader who wants one goes looking.
+- **A fabricated URL was caught before it shipped.** A DriveThruRPG product link was invented from a guessed product ID while filling in the resources list — the web search confirmed the adventure exists there but never returned a canonical URL. Removed and replaced with plain text plus a TODO rather than shipped. Matt supplied the real one (`product/572860`) in the next message. **Worth remembering: search results confirming a thing exists are not a source for its URL.**
+- **The closing link is deliberately not a link.** Matt's draft ended "Check that out here," but episode 1 doesn't exist, so a live link would 404. Replaced with "First session is coming. I'll put the link right here when it's up," which makes post one publishable standalone. TODO left at the spot.
+- **MDX comments split Markdown lists.** `{/* ... */}` placed between two bullets broke the resources list into two `<ul>`s in the rendered HTML. Comments go *above* a list, never inside one. Caught in `dist`, not in review.
+- **Alt text described the photo before naming the character.** Written as "a bearded dwarf miniature…" until Matt confirmed the mini was Borb, then updated to name him. Alt text is a factual description of an image, not a place to assert something unverified.
+- **`quality={70}` chosen for what heroes actually are** — handheld photos of miniatures where WebP artifacts don't read at this size. The re-encoded 720w was eyeballed against the original before committing, which matters given the site's standing no-AI-art promise about its own images.
+- **Committed to `main`**, consistent with every prior commit here; the batched-merge rule in the root CLAUDE.md is scoped to hobbinomicon's build credits.
+
+### The 100 is real but the magnitude is overstated
+
+Dropping 17 KiB and adding a priority hint does not move LCP from 4.3s to 1.0s. The first run measured a page deployed roughly a minute earlier, so it hit a **cold Netlify edge cache**; the re-run hit a warm one. The giveaway is TBT falling 130ms → 10ms when neither change touched a line of JavaScript. Directionally correct, quantitatively inflated. **A trustworthy number needs a re-run on an ordinary day.**
+
+Related: the PSI baseline in CLAUDE.md (98 / 100 / 100 / 100, LCP 2.3s, 07-08) is almost certainly the **homepage** — the same file describes the featured homepage thumbnail as "the mobile LCP." So 98 → 81 → 100 was never a like-for-like comparison of one page. It has not been rewritten; it needs a clean measurement first.
+
+### Tooling note
+
+The keyless PageSpeed API returned **429, daily quota exhausted** (shared anonymous project), and no Google API key exists in the repo or environment. Fell back to driving `pagespeed.web.dev` in Chrome, which is the documented ground truth anyway. Its results panels live in shadow DOM, so scores come off screenshots; `get_page_text` returns ~51KB of Lighthouse's own CSS and does not yield the metric values.
+
+### Artifacts
+
+- `src/content/posts/shadowdark-repaired-something-in-me/index.mdx` — new
+- `src/content/posts/shadowdark-repaired-something-in-me/borb-at-ravenmere.jpeg` — new (2000×1500, 541K source)
+- `src/layouts/PostLayout.astro` — modified (`fetchpriority`, `quality`, comment explaining both)
+
+### Verification
+
+Clean `rm -rf dist && npm run build` at each step. Confirmed in `dist`: page renders at `/hobby/shadowdark-repaired-something-in-me/`, no TODO comment leaks into HTML, resources list is a single intact `<ul>`, srcset serves 720/1080/1440 at 63.7/112.5/163.3 KiB. Confirmed live: 200 at the public URL, `fetchpriority="high"` served, 720w candidate 65,260 bytes. PSI mobile re-run from a fresh analysis ID.
+
+### Still open
+
+Episode 1 is unbuilt and blocked on Matt: **Borb's sheet** (stats, HP/AC, level, gear, spells, deity or patron, talent), the **frog familiar's name**, and **why he goes back out alone** after being carried home unconscious. Nothing about the new series — its name, its slug, its `series` entry — has been decided yet.
+
+---
+
 ## 2026-07-27 — Six real character sheets; a characters collection with a page each; cast on every post
 
 Six commits, **all local — nothing pushed.** `main` is ahead of `origin/main` by 6.
