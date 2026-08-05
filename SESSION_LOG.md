@@ -4,6 +4,77 @@ Append-only. **Newest entry first.**
 
 ---
 
+## 2026-08-04–05 — Borb's sheet; the solo series gets a name (*Inheritance*), a series entry, and episode 1's preface
+
+One commit, **pushed by Matt mid-session**: `f17b736` "Live play updates" (which also swept up the previous wrap's uncommitted STATUS/SESSION_LOG edits). `main` is level with `origin/main`. Only the episode 1 copy-edits made after that commit are still local.
+
+The top-ranked blocker from the last two wraps is gone. Matt handed over Borb's character card, then fed the campaign premise in over a dozen messages, correcting as he went.
+
+### The sheet (`src/content/characters/borb.mdx`)
+
+**Borbulious**, Dwarf Witch, Redeemer background, neutral, Gede. STR 8 / DEX 7 / CON 12 / INT 8 / WIS 12 / CHA 16, 14 HP. Spells: Cauldron, Eyebite, Shadowdance, Fog, Alter Self, Toadstool. Talents: +2 Charisma, an additional spell. Familiar: **Bitter**, a frog.
+
+Gear reflects current state rather than the starting list — the oil flask is listed as empty, the torch is gone, and the treasure Matt corrected twice landed as the **Ravenmere family signet ring** and the **Ravenmere amulet**, at 16 gold.
+
+### Two values were derived, not given
+
+- **AC 8.** No armor anywhere in the gear list and DEX 7 is a −2, so 10 − 2.
+- **Level 3.** Two rolled talents means talent rolls at 2 and 3, and 14 HP is consistent. **Still unconfirmed by Matt.**
+
+**CHA 16 was confirmed rather than assumed.** The hobby post records Borb opening the night casting Fog "even with a +3," and +3 is the CHA 16 modifier. So the 16 is the post-talent value and the +2 Charisma talent is already baked in, not something to add on top. Checking the published post beat asking.
+
+### *Inheritance*
+
+Matt named the series late in the session. `src/content/series/inheritance.mdx` created (live-play, Shadowdark, ongoing, startDate 2026-08-04), and `series: inheritance` added to Borb so he groups under his own campaign heading on `/characters/` instead of falling into the "Others" bucket.
+
+### The premise, assembled from Matt's messages
+
+The party was a **traveling mercenary company** Borb signed on with; Ravenmere was local to him. They killed Lady Ravenmere and ran, so **as far as they are concerned the job is finished**. They split the gold, left Borb the ring and the amulet, and moved on. The family was never laid to rest, so the curse holds. Lord Ravenmere's ghost named **two** conditions for the manor to pass to the ring-bearer: bury the family in the ancestral crypts **and** remove the page of the Necronomicon still in the house. Victor Ravenmere never got the ring he bargained for, which makes him a live threat.
+
+Borb's own read is that **Gede withdrew her favor** — he's old, this was not his first outing, and the whole night of failed casting registered as an answer rather than bad dice. Carousing back in town put him with a **dwarf priest of Gede** who heard all of it and signed on anyway. The party will be **all dwarves**; sheets to come.
+
+### Episode 1 is drafted, `draft: true`
+
+`src/content/posts/inheritance/inheritance-episode-1/index.mdx`. Preface plus the opening scene (the priest commits, they set off for a dwarf wizard, "I know someone that will help, and I know just where to find him"). Matt then **rewrote the whole post himself** and it was copy-edited rather than redrafted.
+
+### Decisions
+
+- **The formal, contraction-free register stays, by Matt's explicit call.** The drafts came out grave and folkloric — "which is not a thing dwarves do," "had not expected," "has not said anything since" — five uncontracted negations against two contractions. That contradicts `voice.md`, which says contractions go everywhere and the voice never formalizes. It was flagged as a departure *introduced by Claude rather than chosen by Matt*, with an offer to run a contraction pass. Matt chose to keep it and instructed that the prose not be changed. **Treat the formal register as this series' house style; `voice.md`'s contraction rule is overridden here and only here.**
+- **`title: Druid` over a witch's class title.** Borb calls himself a druid, the rules call him a witch, and the card's `title` field is the archetype eyebrow, so it carries the self-description while `charClass` carries the mechanics. Renders as Druid / Borbulious / Dwarf Witch. The gap is the character. No witch title table was invented for the neutral slot.
+- **The Necronomicon page is written as the *cause*, not a second errand** — "the page keeping them up" — so burying the family without pulling the page reads as pointless work rather than half a checklist.
+- **Character page and post are allowed to differ.** Matt's rewrite changed wording the character page still carries ("gifted in The Craft" vs "found he had witchcraft in him"). Syncing was offered and *not* authorized; "do not change the prose" was the instruction. **The drift is deliberate, not an oversight.**
+- **Copy-edits were kept minimal and mechanical.** `Trajegy` → Tragedy, `stablized` → stabilized, one sentence fragment ("The clutch toadstool cast to save our pit fighter.") joined to its predecessor with a comma rather than rewritten, one comma splice repaired, Toadstool capitalized to match the sheet, long lines rewrapped. The spoiler line was linked to DriveThruRPG `product/572860` matching the hobby post's existing link, and italicized so it reads as a note.
+- **Backstory left as a draft in Matt's hands.** Written from his raw material and offered as a placeholder that happens to be prose, consistent with the other six still carrying "Backstory goes here."
+
+### A routing assumption was wrong
+
+The preface's link to the hobby post was written as `/blog/shadowdark-repaired-something-in-me/`, which **404s**. There is no `/blog/[slug]` route on this site — only `blog/index.astro`. Posts route by type: `/live-plays/`, `/hobby/`, `/reviews/`, `/stories/`, `/guides/`. Corrected to `/hobby/...` and verified 200. The `/posts/` → `/blog/` redirect noted in CLAUDE.md is about the *index*, not post URLs.
+
+### The dev server got wedged by a concurrent build
+
+Running `npm run build` while `astro dev` was live raced it writing `.astro/`, and both `content-modules.mjs` and `data-store.json` failed their atomic renames (`ENOENT` on `.tmp` → final). The symptom was the new post 404ing in dev while the series and character pages served fine. Fixed with `rm -rf .astro` and a restart. **Don't run a production build against a live dev server in this repo.**
+
+### Artifacts
+
+- `src/content/characters/borb.mdx` — new (sheet + backstory, `series: inheritance`)
+- `src/content/series/inheritance.mdx` — new
+- `src/content/posts/inheritance/inheritance-episode-1/index.mdx` — new, `draft: true`; rewritten by Matt, then copy-edited
+- `~/.claude/projects/…/memory/borb-solo-campaign-premise.md` — new; holds the module's unused "What Happens Next" threads (Victor's escalation to authorities then assassins; Evelyn "Evie" Hanacarn of the Order of Gehemna hunting Necronomicon pages, possibly a secret agent of Shune the Vile). That text is Matt's copy of the adventure and exists nowhere in the repo.
+
+### Verification
+
+`npm run build` clean at each step. Confirmed: Borb renders at `/characters/borb/`, groups under an **Inheritance** heading on `/characters/` rather than "Others", the series page serves at `/series/inheritance/`, episode 1 serves at `/live-plays/inheritance-episode-1/` in dev with Borb's card underneath, and the draft is **correctly excluded from the production build**. Spoiler link href verified in rendered HTML.
+
+### A crossover is now on the page
+
+Matt's own line has Borb's craft coming "up out of the land, not the kind bargained from Shune." Three of the Shadowdark Season 1 party serve Shune the Vile, and the Ravenmere module hints Evie may be her agent. Borb now holds a stated position on exactly that god. Unplanned, but the friction between the two campaigns is written down.
+
+### Still open
+
+The priest and the wizard are **unnamed in the text** and have no sheets or character entries; Matt is supplying them. Episode 1 stops at the wizard line with **no TODO marker left in the file** (Matt's rewrite removed it). "his wife," describing Lady Ravenmere's relation to Lord Ravenmere, is **a Claude inference Matt has not confirmed**.
+
+---
+
 ## 2026-08-02–03 — First hobby post (Ravenmere Manor as a *player*); hero image perf fix takes the post to 100
 
 Two commits, **both pushed and live**: `d7feb27` (the post) and `cb572a9` (the hero fix).

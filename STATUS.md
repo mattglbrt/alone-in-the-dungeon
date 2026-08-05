@@ -1,34 +1,40 @@
-# STATUS — Alone in the Dungeon · updated 2026-08-03
+# STATUS — Alone in the Dungeon · updated 2026-08-05
 
 ## Now
-Live, polished, and **everything is deployed** — `main` is level with `origin/main`, nothing sitting local. (The 07-27 STATUS claimed six unpushed commits; that was stale, the push had already happened.)
+Live and fully deployed. `main` is level with `origin/main` at `f17b736`; only the episode 1 copy-edits are local and uncommitted.
 
-The site has its **first `hobby` post**: Matt's first tabletop RPG as a player since 2002, playing *The Tragedy of Ravenmere Manor* through a paid DM service. `/hobby/` had been building empty until now. It scores **100/100/100/100** mobile after a hero-image fix that applies to every post.
+The solo campaign that had no name, no slug, and no character sheet now has all three. **Borb's sheet is done**, the series is called **Inheritance**, and episode 1 exists as a draft with its preface and opening scene written. Matt rewrote the post himself; it was copy-edited, not redrafted.
 
-The content thread is still the constraint, and it grew a third job. **Six backstories**, **session 3's prose**, and now **episode 1 of Borb's solo campaign** — the sequel this post explicitly promises.
+The content thread is still the constraint, but the shape changed. Episode 1 is no longer blocked on a character sheet, it's waiting on **session content and two more dwarves**.
 
 ## Next (ranked)
-1. **Borb's sheet, then episode 1.** Blocked on Matt only: stats, HP/AC, level, gear, spells, deity or patron, talent, the frog familiar's name, and why Borb goes back out alone. The new series has no name, slug, or `series` entry yet. Post one ends on "First session is coming. I'll put the link right here when it's up" with a TODO at the spot.
-2. **Write the six backstories.** `src/content/characters/*.mdx`, below the `---`. 3–5 sentences each. `npm run dev` previews live.
-3. **Write session 3.** Its file is frontmatter only; the party grid renders underneath whatever gets written.
-4. **Re-measure PSI on an ordinary day** and rewrite the CLAUDE.md baseline. Today's 100 is real but inflated (see Open questions), and the recorded 98 / LCP 2.3s baseline is the *homepage*, not a post page.
-5. **Newsletter capture** (e.g. Buttondown) — still the only owned re-engagement channel missing. Decide with hobbinomicon; same decision, two sites.
+1. **Finish episode 1.** The post stops at the priest saying "I know someone that will help, and I know just where to find him." Needs the search for the wizard, the rolls, how it went. Then flip `draft: true` → `false`.
+2. **The priest and the wizard.** Both are unnamed in the text and have no sheets or `characters/` entries. Sheets are coming from Matt. Once they exist: name them in the prose, add the entries, and add their ids to the post's `characters` array so their cards render under the episode. The whole party will be dwarves.
+3. **Link the hobby post to episode 1.** `shadowdark-repaired-something-in-me/index.mdx:77` still carries `{/* TODO: link this to the Borb solo campaign episode 1 once that post exists. */}` at the "I'll put the link right here when it's up" line. Fill with `/live-plays/inheritance-episode-1/` on publish.
+4. **Write the six backstories.** `src/content/characters/*.mdx`, below the `---`, 3–5 sentences each. Unblocked, untouched this session. The rival-cult premise gives all six a common spine.
+5. **Write session 3.** Its file is frontmatter only; the party grid renders underneath whatever gets written.
+6. **Re-measure PSI on an ordinary day** and rewrite the CLAUDE.md baseline. The recorded 98 / LCP 2.3s is the *homepage*, not a post page, and the 08-03 100 was measured on a warm edge.
+7. **Newsletter capture** (e.g. Buttondown) — still the only owned re-engagement channel missing. Decide once with hobbinomicon.
 
 ## Blockers
-Episode 1 cannot start without Borb's character sheet from Matt. Everything else is unblocked.
+Episode 1 can't be finished without Matt's session content and the two dwarf sheets. Everything else is unblocked.
 
 ## Recently done
-- 08-03 — Hero image perf fix in `PostLayout.astro`, covering **every** post hero: `fetchpriority="high"` (it was eager but unprioritized, unlike the homepage featured thumb) and `quality={70}` (720w candidate 81.0 → 63.7 KiB). Post went 81 → **100**, LCP 4.3s → 1.0s (`cb572a9`). Session 1 and 2 heroes got re-encoded as a side effect.
-- 08-02 — First `hobby` post shipped: "Shadowdark Repaired Something in Me" — Ravenmere Manor as a player, 10/10 for Rogue Game Masters, and the essay about Shadowdark breaking the buy-and-shelve cycle. Matt drafted; edited to `voice.md`, nine headers, hero image of Borb (`d7feb27`).
-- 07-27 — Character pages shipped: `characters` collection, `/characters/` roster, page each, cast on every post, full sheets only on the newest episode (`389377d`, `3abe7ca`, `fdd7b04`, `0689020`).
-- 07-22 — GEO port verified live; drafts visible under `npm run dev` (`72eae24`, `7dd2d30`).
+- 08-04–05 — **Inheritance** created: series entry, Borb's full sheet (Dwarf Witch, level 3, Gede, familiar Bitter), episode 1 draft with preface and opening scene. Premise assembled: the mercenary company thinks the job is done, the family is unburied, the Necronomicon page is still in the house, and Lord Ravenmere's ghost will hand over the manor for both. Committed and pushed as part of `f17b736`.
+- 08-03 — Hero image perf fix in `PostLayout.astro` covering every post hero: `fetchpriority="high"` + `quality={70}`. Post went 81 → 100, LCP 4.3s → 1.0s (`cb572a9`).
+- 08-02 — First `hobby` post shipped: "Shadowdark Repaired Something in Me" (`d7feb27`).
+- 07-27 — Character pages shipped: `characters` collection, `/characters/` roster, cast on every post, full sheets only on the newest episode.
 
 ## Open questions
-- **Is today's 100 trustworthy?** Probably not at face value. The 81 was measured on a page deployed ~1 minute earlier (cold Netlify edge); the 100 on a warm one. TBT fell 130ms → 10ms when nothing touched JavaScript, which no image change explains. Re-run before recording it anywhere.
-- **Worth adding an srcset candidate below 720w?** Lighthouse's *larger* finding (61.2 KiB) was the 720w file being oversized for its 356×267 display box. Left alone since the page scores 100 without it, but it's real bytes for phone readers.
-- **Should the review-of-the-adventure post exist separately?** This post explicitly defers it: Matt said he'll write about being a paying player after a few more sessions.
-- **Session-accurate rosters.** Posts show *current* stats. Mitigated by full sheets on the newest episode only, but the first level-up needs a real answer (per-post overrides?).
-- **Was the 3-and-3 god split deliberate?** Shune the Vile (Malchor, Tragan, Morgan) against Gede (Bram, Pinch, Poke). Unconfirmed.
+- **Borb's level is a Claude inference.** Two rolled talents implies levels 2 and 3, and 14 HP fits, but Matt never stated it. Same for **AC 8** (derived as 10 − 2 for DEX 7, no armor). Confirm before these numbers travel into the GEO output.
+- **Is Lady Ravenmere Lord Ravenmere's wife?** Episode 1 says "neither of them was killing his wife." That relation was inferred, not given.
+- **Character page and post prose have deliberately drifted.** Matt's rewrite changed wording Borb's page still carries. Syncing was declined ("do not change the prose"). Revisit only if he asks.
+- **Is the all-dwarf party a coincidence or the point?** Borb left dwarven society over what it does to nature and is now recruiting exclusively from it. If the priest is deliberately assembling dwarves, nobody has told Borb why.
+- **How far do the two campaigns touch?** Borb's craft is explicitly "not the kind bargained from Shune"; three of the S1 party serve Shune, and the module hints Evie Hanacarn may be her agent.
+- **Post title.** "Inheritance Episode 1" matches the site's "Shadowdark Live Play Session 1" convention but is flat against `voice.md`'s "punchy, an upgrade of a lazy title."
+- **Worth adding an srcset candidate below 720w?** Real bytes for phone readers; page scores 100 without it.
+- **Should the review-of-the-adventure post exist separately?** The hobby post explicitly defers it until a few more sessions as a paying player.
+- **Session-accurate rosters.** Posts show *current* stats; the first level-up needs a real answer (per-post overrides?).
 - Shared newsletter provider across AITD + Hobbinomicon, or separate lists?
-- Should `/llms.txt` be linked from the site? Same question open on hobbinomicon — decide once for both.
-- Nav link for `/characters/`? Declined 07-27. Now that `/hobby/` is non-empty too, nav may deserve one look rather than two separate calls.
+- Should `/llms.txt` be linked from the site? Same question open on hobbinomicon.
+- Nav link for `/characters/`? Declined 07-27. `/hobby/` and now `/series/inheritance/` are non-empty too, so nav may deserve one look.
