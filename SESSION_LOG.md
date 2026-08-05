@@ -6,7 +6,7 @@ Append-only. **Newest entry first.**
 
 ## 2026-08-04–05 — Borb's sheet; the solo series gets a name (*Inheritance*), a series entry, and episode 1's preface
 
-One commit, **pushed by Matt mid-session**: `f17b736` "Live play updates" (which also swept up the previous wrap's uncommitted STATUS/SESSION_LOG edits). `main` is level with `origin/main`. Only the episode 1 copy-edits made after that commit are still local.
+Two commits, **both pushed**. `f17b736` "Live play updates" — Matt's, mid-session, which also swept up the previous wrap's uncommitted STATUS/SESSION_LOG edits. `385a4cc` "Copy-edit episode 1; wrap 08-04/05" — the copy-edits plus this wrap. `main` is level with `origin/main`, working tree clean.
 
 The top-ranked blocker from the last two wraps is gone. Matt handed over Borb's character card, then fed the campaign premise in over a dozen messages, correcting as he went.
 

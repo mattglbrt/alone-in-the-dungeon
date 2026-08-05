@@ -1,7 +1,7 @@
 # STATUS — Alone in the Dungeon · updated 2026-08-05
 
 ## Now
-Live and fully deployed. `main` is level with `origin/main` at `f17b736`; only the episode 1 copy-edits are local and uncommitted.
+Live and **everything is deployed**. `main` is level with `origin/main` at `385a4cc`, working tree clean.
 
 The solo campaign that had no name, no slug, and no character sheet now has all three. **Borb's sheet is done**, the series is called **Inheritance**, and episode 1 exists as a draft with its preface and opening scene written. Matt rewrote the post himself; it was copy-edited, not redrafted.
 
