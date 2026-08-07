@@ -1,7 +1,7 @@
 # STATUS — Alone in the Dungeon · updated 2026-08-07
 
 ## Now
-Live and **everything is deployed**. `main` is level with `origin/main` at `385a4cc` (last deploy re-ran `a7d7891`); no repo changes this session.
+Live and **everything is deployed**. `main` is level with `origin/main` at `8efaeb2`, working tree clean; the push deployed cleanly. No site code changed this session.
 
 **The contact form works again.** It had been 404ing on submit because Netlify had no form registered — form detection was off when the 08-05 deploy ran, and turning it on doesn't retroactively scan a live build. A rebuild of the same commit fixed it. Form registered, POST returns 200, honeypot discards bots, email notifications go to `matt@hobbinomicon.com`.
 
@@ -21,7 +21,7 @@ The content thread is still the constraint and is unchanged: episode 1 waits on 
 Episode 1 can't be finished without Matt's session content and the two dwarf sheets. Everything else is unblocked.
 
 ## Recently done
-- 08-07 — **Contact form 404 fixed.** Cause was Netlify form registration, not markup: detection was off at the 08-05 deploy and enabling it doesn't rescan a live build. Rebuilt `a7d7891` (deploy `6a763087eeb48ffcad22cc99`); form `contact` registered, POST → 200, honeypot verified discarding, notification hook → `matt@hobbinomicon.com`. No code changed.
+- 08-07 — **Contact form 404 fixed.** Cause was Netlify form registration, not markup: detection was off at the 08-05 deploy and enabling it doesn't rescan a live build. Rebuilt `a7d7891`; form `contact` registered, POST → 200, honeypot verified discarding, notification hook → `matt@hobbinomicon.com`. No site code changed; wrap committed as `8efaeb2`, whose deploy also came up clean with the form still registered.
 - 08-04–05 — **Inheritance** created: series entry, Borb's full sheet (Dwarf Witch, level 3, Gede, familiar Bitter), episode 1 draft with preface and opening scene. Premise assembled: the mercenary company thinks the job is done, the family is unburied, the Necronomicon page is still in the house, and Lord Ravenmere's ghost will hand over the manor for both. Committed and pushed as part of `f17b736`.
 - 08-03 — Hero image perf fix in `PostLayout.astro` covering every post hero: `fetchpriority="high"` + `quality={70}`. Post went 81 → 100, LCP 4.3s → 1.0s (`cb572a9`).
 - 08-02 — First `hobby` post shipped: "Shadowdark Repaired Something in Me" (`d7feb27`).

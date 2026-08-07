@@ -6,7 +6,7 @@ Append-only. **Newest entry first.**
 
 ## 2026-08-07 — The contact form was 404ing on submit; Netlify had no form registered
 
-Short infrastructure session. **No repo files were changed** and no commit was made. The fix was a deploy, not code.
+Short infrastructure session. **No site code was changed** — the fix was a deploy, not code. Committed and pushed as `8efaeb2` (session log, STATUS, and the carried-over `wrap.md` edit only). `main` level with `origin/main`.
 
 ### The symptom
 
@@ -43,9 +43,11 @@ Triggered a rebuild of the current commit via `netlify api createSiteBuild`. Sit
 
 **Actual email delivery.** A configured hook is not the same as a message reaching the inbox, and Netlify notification mail is sometimes filtered on first send. Nothing has exercised that path — the honeypot test predated the notification setup and was discarded anyway. Closing it needs one real submission from the live page, then deleting the entry.
 
-### Note
+### Wrap-up notes
 
-`.claude/commands/wrap.md` was already modified and uncommitted at session start, carried over from a previous session. Untouched here. Still uncommitted.
+- `.claude/commands/wrap.md` was already modified and uncommitted at session start, carried over from a previous session. Reviewed and kept — it adds the dashboard card's `updated` stamp to step 4, which this wrap then used. Committed as part of `8efaeb2`.
+- Pushing `8efaeb2` triggered a fresh Netlify deploy, which **reached `ready` with no errors** and left the `contact` form still registered. That build ran with detection already on, so registration no longer depends on the one-off manual rebuild.
+- **`mdggrowth/` and `~/Documents/dev/dashboard/` are not git repositories.** `PROJECTS.md` and the dashboard `data.json` are saved on disk only — there is no version history for either, so a bad edit there is not recoverable via git. Worth knowing before relying on them as a record.
 
 ---
 
