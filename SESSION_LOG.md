@@ -4,6 +4,51 @@ Append-only. **Newest entry first.**
 
 ---
 
+## 2026-08-07 — The contact form was 404ing on submit; Netlify had no form registered
+
+Short infrastructure session. **No repo files were changed** and no commit was made. The fix was a deploy, not code.
+
+### The symptom
+
+Matt reported the contact form 404ing after hitting enter. He had already turned on form detection in the Netlify dashboard and re-tested; it still failed.
+
+### The cause
+
+**Netlify only scans deployed HTML for forms during a deploy's post-processing step.** Enabling the setting does not retroactively scan a build that is already live. The last deploy was 2026-08-05 (`a7d7891`), which ran while detection was still off, so `listSiteForms` returned **zero forms for the site**. With no form registered, a POST to `/thanks/` falls through to the static file router, which has no POST handler — hence the 404. The toggle was working; it just had nothing to act on until the next build.
+
+### What was ruled out first
+
+Everything on the code side was already correct, and was verified rather than assumed:
+
+- `src/pages/contact.astro:68–79` — `name="contact"`, `method="POST"`, `action="/thanks/"`, `data-netlify="true"`, `netlify-honeypot="bot-field"`, and the hidden `<input name="form-name" value="contact">`.
+- **Those attributes survive the Astro build** — confirmed by grepping `dist/contact/index.html`, since a framework stripping them is the other common cause of this exact symptom.
+- `src/pages/thanks.astro` exists, so the redirect target was real.
+- `ignore_html_forms: false` on the site — Matt's toggle had stuck.
+- Build command `astro build && pagefind --site dist`, publish dir `dist`. Fine.
+
+There is **no `netlify.toml`** in this repo; build settings live in the dashboard.
+
+### The fix
+
+Triggered a rebuild of the current commit via `netlify api createSiteBuild`. Site id **`1189528c-0e46-41fe-b567-01731cd8fea2`**. Deploy `6a763087eeb48ffcad22cc99`, same commit `a7d7891`, published 2026-08-07T19:23:12Z. Matt approved the deploy before it was fired.
+
+### Verification
+
+- Form **`contact`** now registered (id `6a763098bd7c930008614d52`) — it was absent before.
+- `POST https://aloneinthedungeon.com/thanks/` → **200**, not 404.
+- **Honeypot confirmed working.** The routing test was deliberately sent with `bot-field` filled so Netlify would accept-and-discard it: status 200, and `submission_count` stayed at **0**. This proved the endpoint routes without leaving a junk entry in Matt's forms inbox to clean up.
+- Matt then set up notifications; the hook was verified present via `listHooksBySiteId` rather than taken on trust: `email · submission_created · matt@hobbinomicon.com`, not disabled. That is the public contact address from the page, not the Netlify account email (`matt@everyway.io`) — assumed deliberate.
+
+### Still untested
+
+**Actual email delivery.** A configured hook is not the same as a message reaching the inbox, and Netlify notification mail is sometimes filtered on first send. Nothing has exercised that path — the honeypot test predated the notification setup and was discarded anyway. Closing it needs one real submission from the live page, then deleting the entry.
+
+### Note
+
+`.claude/commands/wrap.md` was already modified and uncommitted at session start, carried over from a previous session. Untouched here. Still uncommitted.
+
+---
+
 ## 2026-08-04–05 — Borb's sheet; the solo series gets a name (*Inheritance*), a series entry, and episode 1's preface
 
 Two commits, **both pushed**. `f17b736` "Live play updates" — Matt's, mid-session, which also swept up the previous wrap's uncommitted STATUS/SESSION_LOG edits. `385a4cc` "Copy-edit episode 1; wrap 08-04/05" — the copy-edits plus this wrap. `main` is level with `origin/main`, working tree clean.
