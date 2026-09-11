@@ -21,4 +21,4 @@ Astro · Tailwind CSS 4 · MDX · Netlify. Search: Pagefind (`astro build && pag
 ---
 
 ## Session workflow (Everyway standard)
-Start: `/orient` — read `STATUS.md`. End: `/wrap` — log entry, refresh STATUS.md, update `../PROJECTS.md` row if the picture changed. System: `../_system/PLAYBOOK.md`.
+Start: `/orient` — read `STATUS.md`. End: `/wrap` — log entry, refresh STATUS.md, update `../PROJECTS.md` row if the picture changed. System: `~/Documents/dev/_system/PLAYBOOK.md`.
