@@ -1,0 +1,12 @@
+# Normalize line endings. The repo is authored on macOS and Windows;
+# everything text is stored and checked out as LF so switching machines
+# never produces a whole-file diff.
+* text=auto eol=lf
+
+# Binary assets — never touch these.
+*.png   binary
+*.jpg   binary
+*.JPG   binary
+*.jpeg  binary
+*.ico   binary
+*.woff2 binary

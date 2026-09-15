@@ -21,3 +21,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# local machine settings (per-machine paths, not shared)
+.claude/settings.local.json
