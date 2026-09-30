@@ -238,13 +238,13 @@ const breadcrumbData = {
           {data.startedReading && (
             <>
               <dt class="text-[0.62rem] uppercase tracking-[0.18em] text-mist-500">Started</dt>
-              <dd class="text-glow-100 sm:col-span-2">{data.startedReading.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</dd>
+              <dd class="text-glow-100 sm:col-span-2">{formatDate(data.startedReading)}</dd>
             </>
           )}
           {data.finishedReading && (
             <>
               <dt class="text-[0.62rem] uppercase tracking-[0.18em] text-mist-500">Finished</dt>
-              <dd class="text-glow-100 sm:col-span-2">{data.finishedReading.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</dd>
+              <dd class="text-glow-100 sm:col-span-2">{formatDate(data.finishedReading)}</dd>
             </>
           )}
         </dl>

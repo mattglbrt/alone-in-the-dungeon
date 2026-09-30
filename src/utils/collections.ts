@@ -274,10 +274,14 @@ export const STATUS_LABELS: Record<string, string> = {
   hiatus: 'On Hiatus',
 };
 
+// Frontmatter dates parse as midnight UTC. Format them in UTC too, or any
+// machine west of Greenwich (local dev) shows every post a day early.
+// Netlify builds in UTC, which is why production never showed it.
 export function formatDate(date: Date): string {
   return date.toLocaleDateString('en-GB', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
+    timeZone: 'UTC',
   });
 }
