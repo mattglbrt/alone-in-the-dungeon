@@ -4,6 +4,38 @@ Append-only. **Newest entry first.**
 
 ---
 
+## 2026-09-30 — Mausritter scale guide shipped; tables styled; local dates fixed
+
+The first session since 08-07. The post, the table styles, and the date fix were committed as `7e0a655` and pushed. The deploy was live about 45s later: the page returns 200, shows the correct date, and has the table CSS. After the deploy the contact form still answered POST with 200 (honeypot-filled test, so it was discarded).
+
+### Not logged before (from git, not this session)
+Three commits landed between the 08-07 wrap and today with no log entry: `dcb778c` (.gitattributes, ignore local Claude settings), `a515dff` (Node 24.19.0 pinned locally and on Netlify), and `33d38c3` (**Astro 7.3.2 upgrade**). PSI hasn't been re-measured since the upgrade.
+
+### The Mausritter post
+- Matt supplied `~/Downloads/scale.md`, his GM scale reference for running Mausritter with minis. It became `src/content/posts/mausritter-scale-guide/index.mdx` (`type: guides`, `system: 'Mausritter'`, `gameType: tabletop-rpg`), titled "A Human Is Seventeen Mice Tall: A Mausritter Scale Guide." It's the first Mausritter content on the site.
+- The rewrite follows `voice.md`'s polished register: zero em-dashes, Oxford commas, short headers, and a small ending ("Now go steal a thimble."). Every table and number was kept exactly as in the source. The em-dash placeholder cells became blanks.
+- **No personal play history was invented.** Nothing says Matt has actually run Mausritter or run it for his kids. One closing line ("That last one gets them every time") was cut for that reason.
+- Matt's edits: "The campaign villain." removed from both owl rows. The cat's base-size note became "Think of this as a dragon." The modeling sentence was cut from the cat's bestiary row. The rain line became "Every drop erupts in a wave." Matt also edited the file directly on disk during the session.
+- The post was drafted with `draft: true`, then flipped to `false` on Matt's say-so.
+- **Unverified:** the rulebook specifics come straight from Matt's notes and weren't checked against the book: "Mausritter 2.3, ch. 8", the 11 entries, the stat blocks, the 12" move, and the fireball ranges.
+
+### Table styling (`src/styles/global.css`)
+Matt said the tables looked cramped. The cause was that `.prose-body` had **no table rules at all**: browser defaults, no cell padding, and a 1.18rem serif squeezed into 680px. Fixed with CSS alone:
+- System sans at 0.8em, 0.6/0.9em cell padding, a brass header rule, row striping, and a brighter first column.
+- Tables with 4+ columns (`table:has(th:nth-child(4))`) break out to `min(60rem, 100vw − 4rem)` on screens at least 64rem wide.
+- Below 48rem, every table becomes `display:block; overflow-x:auto`, with a `td` min-width of 8rem. Wide tables scroll inside their own box instead of widening the page.
+- A rehype table-wrapper plugin was considered and skipped, because CSS was enough. Verified in Chrome at desktop width and in a 390px iframe: page scrollWidth 371 < 386 viewport, and the wide tables scroll inside themselves. **Site-wide, so the Dolmenwood Appendix N tables changed too.** That page wasn't eyeballed.
+
+### Dates a day early in local dev
+`formatDate` (`src/utils/collections.ts`) used `toLocaleDateString` without a timezone. Frontmatter dates parse as midnight UTC, so US local time rendered the previous day. **Production was never affected**, because Netlify builds in UTC (confirmed: live "2 August 2026" matches `date: 2026-08-02`). Fixed by adding `timeZone: 'UTC'`. The two inline reading-date formatters in `PostLayout.astro` now call `formatDate` too.
+
+### Still open
+- A real contact-form submission, to confirm the notification email lands. Still Matt's to do. Claude shouldn't submit the real form.
+- `.claude/commands/wrap.md` still has an uncommitted edit that predates this session. It was deliberately left out of `7e0a655`.
+
+---
+
+
 ## 2026-08-07 — The contact form was 404ing on submit; Netlify had no form registered
 
 Short infrastructure session. **No site code was changed** — the fix was a deploy, not code. Committed and pushed as `8efaeb2` (session log, STATUS, and the carried-over `wrap.md` edit only). `main` level with `origin/main`.

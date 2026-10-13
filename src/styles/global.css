@@ -427,8 +427,9 @@
 
 /* Tables are reference data, not reading copy: system sans at a smaller
    size, real cell padding, and quiet row striping. Tables with 4+ columns
-   break out of the 680px reading column on wide screens; on phones any
-   table scrolls sideways inside itself instead of widening the page. */
+   break out of the 680px reading column on wide screens; on phones 3+ column
+   tables scroll sideways inside themselves instead of widening the page.
+   Two-column tables stay real tables so they still fill the column. */
 .prose-body table {
   width: 100%;
   border-collapse: collapse;
@@ -466,11 +467,11 @@
 }
 
 @media (max-width: 47.99rem) {
-  .prose-body table {
+  .prose-body table:has(th:nth-child(3)) {
     display: block;
     overflow-x: auto;
   }
-  .prose-body td {
+  .prose-body table:has(th:nth-child(3)) td {
     min-width: 8rem;
   }
 }
