@@ -4,6 +4,25 @@ Append-only. **Newest entry first.**
 
 ---
 
+## 2026-10-13 — Deploy checks closed; Mausritter resources section; 2-column tables fixed on phones
+
+No handoff. Shipped as `e0662f6` and pushed. It was live about 60s later (the new section and CSS confirmed on the production page). That commit also carried the 09-30 STATUS/SESSION_LOG changes, which had never been committed.
+
+### Deploy checks (the three carried over from 09-30)
+- **Contact form: verified end to end.** Matt asked to close the checks, so Claude sent one real submission with curl (subject "Contact form delivery test 2026-10-13"). That reverses the 09-30 note saying Claude shouldn't submit it. Netlify returned 200. Matt confirmed the email arrived at `matt@hobbinomicon.com` and deleted the entry. The Netlify CLI couldn't list submissions (likely not logged in).
+- **PSI mobile: homepage only.** The keyless PSI API had hit its shared daily quota, and the Chrome extension wasn't connected, so Matt ran it himself: **99 / 100 / 100 / 100**, FCP 1.5s, LCP 2.1s, TBT 50ms, CLS 0, SI 1.5s. The CLAUDE.md baseline is rewritten (previously 98, LCP 2.3s from 07-08). The Mausritter post and a normal post are still unmeasured.
+- **Dolmenwood Appendix N tables.** Without a browser, Claude read the code instead. All five tables there have two columns. The 09-30 mobile rule (`display:block; overflow-x:auto` on *every* table) shrinks a table to its content width, so short 2-column tables would stop partway across the column. **Fix:** the phone rule and its `td` min-width now apply only to `table:has(th:nth-child(3))`. Two-column tables stay real tables at 100% width. Matt checked it on a phone: good.
+
+### Mausritter resources section
+Matt asked for a section at the bottom of `mausritter-scale-guide/index.mdx`: "Some Useful Things I've Been Using With My Kids for Our Mausritter Campaign", with six links: Tomb of a Thousand Doors (Plus One Exp), Field Guide of the Rittermarch, Bernpyle Zines, Mayfield, The Gnarled Warden of Faeroot Gaol (all ManaDawn Tabletop Games), and Stink City (Frau Knurrkater). The titles and makers came from each page's own title tag. No descriptions or play claims were added beyond Matt's heading. The section sits after "Now go steal a thimble.", so that line is no longer the last one; Matt was told and didn't object.
+
+### Still open
+- PSI on the Mausritter post and a normal post.
+- `.claude/commands/wrap.md` still has the uncommitted edit that predates 09-30. It's left out again.
+
+---
+
+
 ## 2026-09-30 — Mausritter scale guide shipped; tables styled; local dates fixed
 
 The first session since 08-07. The post, the table styles, and the date fix were committed as `7e0a655` and pushed. The deploy was live about 45s later: the page returns 200, shows the correct date, and has the table CSS. After the deploy the contact form still answered POST with 200 (honeypot-filled test, so it was discarded).

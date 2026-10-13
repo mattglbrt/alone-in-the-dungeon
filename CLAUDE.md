@@ -7,7 +7,7 @@ Blog at **aloneinthedungeon.com** — solo wargames & tabletop RPGs: live plays,
 Astro · Tailwind CSS 4 · MDX · Netlify. Search: Pagefind (`astro build && pagefind --site dist`). Commands: `npm run dev` / `build` / `preview`. Content: `src/content/posts/` (folder per post, grouped by series) + `src/content/series/`. Post types: live-play, review, stories, hobby, guides, news.
 
 ## Performance guardrails (closed decisions — don't reopen)
-- **PageSpeed Insights mobile is the ground truth**, not local Lighthouse. Baseline 2026-07-08: 98 / 100 / 100 / 100, LCP 2.3s.
+- **PageSpeed Insights mobile is the ground truth**, not local Lighthouse. Homepage baseline 2026-10-13: 99 / 100 / 100 / 100, LCP 2.1s (FCP 1.5s, TBT 50ms, CLS 0, SI 1.5s). Previous: 2026-07-08, 98 / 100 / 100 / 100, LCP 2.3s.
 - Featured homepage thumbnail stays `eager` + `fetchpriority="high"` (it IS the mobile LCP); homepage grid cards are never eager.
 - GA4 stays (worth ~1 point); IM Fell heading font stays; `--font-sans` is the system stack.
 - YouTube thumbnails are self-hosted (build-time WebP via `utils/youtube.ts`); embeds are click-to-play facades (`YouTubeEmbed.astro`).
