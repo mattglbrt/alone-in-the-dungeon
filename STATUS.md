@@ -1,9 +1,7 @@
-# STATUS — Alone in the Dungeon · updated 2026-10-13
+# STATUS — Alone in the Dungeon · updated 2026-11-01
 
 ## Now
-Live and deployed. `main` @ `e0662f6`, pushed; the deploy came up in ~60s. The only uncommitted change is the pre-existing `.claude/commands/wrap.md` edit.
-
-**New 10-13:** all three post-09-30 deploy checks are closed. The contact form email is confirmed. The homepage PSI is 99 / 100 / 100 / 100 (LCP 2.1s), now the baseline. The Mausritter guide gained a resources section (six links Matt uses with his kids). Two-column tables no longer shrink on phones.
+Live and deployed. The site **runs on the Mac** (migrated 11-01, everything verified). Development uses Node 24.19.0 via fnm, and `~/.zshrc` switches to it automatically from `.nvmrc`. Build, Pagefind and the dev server are all clean.
 
 The content thread is still the constraint: episode 1 waits on **session content and two more dwarves**.
 
@@ -21,10 +19,10 @@ The content thread is still the constraint: episode 1 waits on **session content
 —
 
 ## Recently done
+- 11-01 — **Mac migration done.** fnm + Node 24.19.0 installed (the system node is v26). `npm install`, `npm run build` + Pagefind, and `npm run dev` all clean; the main pages and the episode 1 draft return 200. No `.env` needed (forms and build config are on Netlify). No Windows leftovers. npm 11 skipped esbuild/fsevents install scripts (allowScripts); the build doesn't need them.
 - 10-13 — **Deploy checks closed** (`e0662f6`). The contact form email arrived (test entry deleted). Homepage PSI 99 / 100 / 100 / 100, LCP 2.1s. Mobile table scroll is now only for 3+ columns, so the Appendix N tables fill the column (Matt checked on a phone). **Mausritter resources section** added: six links.
 - 09-30 — **Mausritter scale guide shipped** (`7e0a655`), rewritten in Matt's voice from his `scale.md` GM notes. **Table styling**: sans at 0.8em, cell padding, striping; 4+ column tables break out to ~60rem on desktop; below 48rem, tables scroll inside themselves. **`formatDate` pinned to UTC**; review reading dates now use it too.
 - Aug–Sep (from git) — Astro 7.3.2 upgrade, Node 24.19.0 pin, `.gitattributes`.
-- 08-07 — Contact form 404 fixed (Netlify registration; rebuild, no code).
 - 08-04–05 — Inheritance created: series, Borb's sheet, episode 1 draft.
 - 08-03 — Post hero perf fix: 81 → 100, LCP 4.3s → 1.0s (`cb572a9`).
 

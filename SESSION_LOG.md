@@ -4,6 +4,24 @@ Append-only. **Newest entry first.**
 
 ---
 
+## 2026-11-01 — Mac migration: Node via fnm, deps installed, build + dev smoke-tested
+
+This was the first session on the Mac. It worked through the orchestrator's 10-31 `HANDOFF.md`. No site code changed.
+
+### Handoff items (all four addressed)
+1. **Dependencies.** `.nvmrc` pins 24.19.0, and the Mac has node v26.13.0. Claude installed `fnm` with Homebrew, then installed Node 24.19.0 through it. The pin was kept, not bumped to 26, to match production (Netlify reads `.nvmrc`; inferred). `npm install` finished clean apart from audit notices. npm 11's allowScripts skipped the install scripts for `esbuild` and `fsevents`. They were left unapproved because the build works without them. Claude's attempt to append the fnm hook to `~/.zshrc` was blocked by the permission classifier, so Matt added `eval "$(fnm env --use-on-cd --shell zsh)"` himself. Verified: a new zsh in the repo gives v24.19.0.
+2. **Secrets.** There are no `.env` files, and none are needed: the contact form is Netlify Forms, GA4 is in the markup, and the build settings live in the Netlify dashboard.
+3. **Windows leftovers.** A grep for `powershell`, `.ps1`, `.bat` and `C:\` found nothing outside `node_modules`/`.git`/`dist`.
+4. **Smoke test.** `npm run build` (Astro + Pagefind) finished with no errors or warnings. Under `astro dev`, `/`, `/blog/`, `/guides/`, `/contact/` and `/live-plays/inheritance-episode-1/` (the draft) all return 200. `/posts/` gives a 404 locally, which is expected: the 301 lives only in Netlify `_redirects`.
+
+The handoff is folded into STATUS and deleted. Matt declined the PSI follow-up ("just want to get any dependencies installed and make sure the mac migration is complete").
+
+### Still open
+- PSI on the Mausritter post and a normal post (unchanged).
+- There's no `mdggrowth/PROJECTS.md` board on this Mac, so no row was updated (for the orchestrator).
+
+---
+
 ## 2026-10-13 — Deploy checks closed; Mausritter resources section; 2-column tables fixed on phones
 
 No handoff. Shipped as `e0662f6` and pushed. It was live about 60s later (the new section and CSS confirmed on the production page). That commit also carried the 09-30 STATUS/SESSION_LOG changes, which had never been committed.
