@@ -33,8 +33,9 @@ export const GET: APIRoute = async () => {
   const out: string[] = [
     '# Alone in the Dungeon',
     '',
-    '> Alone in the Dungeon is a solo tabletop gaming blog covering solo wargames and',
-    'solo roleplaying games. It publishes written live-play session reports from',
+    '> Alone in the Dungeon is a tabletop gaming blog. Solo play comes first: solo',
+    'wargames and solo roleplaying games. It also covers tabletop RPGs and the',
+    'miniatures hobby in general. It publishes written live-play session reports from',
     'ongoing solo campaigns, narrative stories drawn from actual play, reviews of',
     'games and books, hobby posts from the painting desk, and reference guides such',
     'as Appendix N reading lists. Campaigns run as series, each a numbered run of',

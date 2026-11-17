@@ -33,9 +33,9 @@ export const GET: APIRoute = async () => {
     [
       '# Alone in the Dungeon — full content export',
       '',
-      'Solo wargaming and solo tabletop RPG blog: live-play session reports,',
-      'narrative stories drawn from actual play, reviews, hobby posts, and reference',
-      'guides. Written by Matt Gilbert.',
+      'Tabletop gaming blog, solo play first: solo wargames, tabletop RPGs, and the',
+      'miniatures hobby. Live-play session reports, narrative stories drawn from',
+      'actual play, reviews, hobby posts, and reference guides. Written by Matt Gilbert.',
       'Source: https://aloneinthedungeon.com',
       `Generated: ${new Date().toISOString().slice(0, 10)}`,
       '',

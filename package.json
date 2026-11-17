@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.1.0",
   "private": true,
-  "description": "Alone in the Dungeon — a blog about solo wargames and tabletop RPGs.",
+  "description": "Alone in the Dungeon — a blog about solo wargames, tabletop RPGs, and the hobby.",
   "engines": {
     "node": ">=24.19.0"
   },

@@ -8,7 +8,7 @@ export async function GET(context: APIContext) {
   return buildFeed({
     title: 'Alone in the Dungeon',
     description:
-      'A blog about solo wargames and tabletop RPGs — session reports, reviews, and rules musings from the dark.',
+      'A blog about solo wargames, tabletop RPGs, and the hobby — session reports, reviews, and rules musings from the dark.',
     site: context.site ?? 'https://aloneinthedungeon.com',
     posts,
   });
