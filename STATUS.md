@@ -1,39 +1,45 @@
-# STATUS — Alone in the Dungeon · updated 2026-11-01
+# STATUS — Alone in the Dungeon · updated 2026-11-17
 
 ## Now
-Live and deployed. The site **runs on the Mac** (migrated 11-01, everything verified). Development uses Node 24.19.0 via fnm, and `~/.zshrc` switches to it automatically from `.nvmrc`. Build, Pagefind and the dev server are all clean.
+Live and deployed. The site copy now carries the **wider scope** (Matt, 2026-11-17): solo play first (wargames and RPGs), then TTRPGs at large and the hobby. Solo RPGs are TTRPGs, so copy never lists them as separate categories. Philosophy and the occult are not topics; they show up only where they come naturally in posts.
 
-The content thread is still the constraint: episode 1 waits on **session content and two more dwarves**.
+**Inheritance is removed.** The Borb solo campaign is still coming under another name, so Borb's sheet and the essay's "Borb isn't done" promise stay.
+
+Nothing is in flight in code. The next site work waits on December's videos.
 
 ## Next (ranked)
-1. **PSI mobile on the Mausritter post and a normal post.** Homepage done 10-13 (99 / 100 / 100 / 100, LCP 2.1s; baseline updated in CLAUDE.md).
-2. **Finish Inheritance episode 1.** It stops at the priest's "I know just where to find him." Then flip `draft: true` → `false`.
-3. **The priest and the wizard.** Sheets are coming from Matt. Once they exist: names in the prose, `characters/` entries, and ids in the post's `characters` array.
-4. **Link the hobby post to episode 1** (`shadowdark-repaired-something-in-me/index.mdx:77` TODO) → `/live-plays/inheritance-episode-1/` on publish.
-5. **Write the six backstories** (`src/content/characters/*.mdx`, 3–5 sentences each). Unblocked.
-6. **Write session 3.** Its file is frontmatter only.
-7. **Newsletter capture.** Hobbinomicon went with Substack (first issue 06 Oct). Decide whether AITD shares it.
-8. **Matt: Episode 1 content** — the session content and the two dwarf sheets (moved from Blockers, 10-13).
+1. **Substack subscribe button.** Points at the Alone in the Dungeon publication (one `mattglbrt` account, no second list). Needs the publication URL from Matt. First issue Tue 19 Jan 2027.
+2. **When the first videos exist** (production starts in December, four banked, the solo RPG kit remake first; regular publishing from the week of Mon 4 Jan 2027):
+   - Hobby tips go in as `hobby` posts, the kit remake as a `guides` post, both `format: video`. No build needed.
+   - KDM videos go in as live-play posts with `system: Kingdom Death: Monster`, linking the KDM channel.
+   - Decide then: a `/vlogs/` section (no current type fits vlogs) and moving Hobby to the top nav.
+3. **The Borb solo campaign.** New series when Matt has its name and first session; attach Borb's sheet and fill the essay's link (`shadowdark-repaired-something-in-me/index.mdx:77` TODO).
+4. **Shadowdark session 3** is still a frontmatter-only draft.
 
 ## Blockers
 —
 
+## Notes
+- **Not decided:** the mix of solo to general content. The strategy doc proposes three in four uploads solo. Matt decides Sun 3 Jan 2027.
+- **Goal:** the first 100 subscribers on the YouTube channel, and the same on the KDM channel.
+- The Convergence stories for Garreth Vale, Triste and Eloryn Vale stay published. Matt considered removing them on 11-17 and kept them. `draft: true` hides a post without deleting it.
+
 ## Recently done
-- 11-01 — **Mac migration done.** fnm + Node 24.19.0 installed (the system node is v26). `npm install`, `npm run build` + Pagefind, and `npm run dev` all clean; the main pages and the episode 1 draft return 200. No `.env` needed (forms and build config are on Netlify). No Windows leftovers. npm 11 skipped esbuild/fsevents install scripts (allowScripts); the build doesn't need them.
-- 10-13 — **Deploy checks closed** (`e0662f6`). The contact form email arrived (test entry deleted). Homepage PSI 99 / 100 / 100 / 100, LCP 2.1s. Mobile table scroll is now only for 3+ columns, so the Appendix N tables fill the column (Matt checked on a phone). **Mausritter resources section** added: six links.
-- 09-30 — **Mausritter scale guide shipped** (`7e0a655`), rewritten in Matt's voice from his `scale.md` GM notes. **Table styling**: sans at 0.8em, cell padding, striping; 4+ column tables break out to ~60rem on desktop; below 48rem, tables scroll inside themselves. **`formatDate` pinned to UTC**; review reading dates now use it too.
-- Aug–Sep (from git) — Astro 7.3.2 upgrade, Node 24.19.0 pin, `.gitattributes`.
-- 08-04–05 — Inheritance created: series, Borb's sheet, episode 1 draft.
-- 08-03 — Post hero perf fix: 81 → 100, LCP 4.3s → 1.0s (`cb572a9`).
+- 11-17 — **Scope copy pass** (`c4be894`): meta, schema, RSS and llms.txt descriptions widened; two new lines on the about page. **Inheritance removed** (`c52808f`): series and episode 1 draft deleted, `/series/inheritance/` 301s to `/series/`, Borb's sheet detached and kept.
+- 11-01 — **Mac migration done.** fnm + Node 24.19.0 (the system node is v26). Build, Pagefind and dev all clean. No `.env` needed. npm 11 skipped esbuild/fsevents install scripts (allowScripts); the build doesn't need them.
+- 10-13 — **Deploy checks closed** (`e0662f6`). Contact form verified. Homepage PSI 99 / 100 / 100 / 100, LCP 2.1s. Mausritter resources section added.
+- 09-30 — **Mausritter scale guide shipped** (`7e0a655`). Table styling. `formatDate` pinned to UTC.
 
 ## Reference
 Netlify site id `1189528c-0e46-41fe-b567-01731cd8fea2`. No `netlify.toml`. Build settings live in the dashboard. **A new form needs a deploy after its markup exists.** Drafts show only under `npm run dev`, not `build`/`preview`.
 
+**YouTube.** KDM channel: "Alone in the Dungeon: KDM", https://www.youtube.com/channel/UC8605grw5cw-xlThSBW304g (renamed 11-17). Subscribers on 11-17: 0 on the main channel, 0 on KDM, no videos on either yet. The strategy docs still need these (orchestrator).
+
+**Footer byline** is "A Matt Gilbert joint." linking to mattglbrt.com. Matt kept that wording over "By Matt Gilbert".
+
 ## Open questions
 - **Mausritter rulebook specifics are unverified** ("2.3, ch. 8", the 11 entries, the stat blocks, the 12" move, the fireball ranges). They came from Matt's notes as-is.
 - **Borb's level 3 and AC 8 are Claude inferences.** Confirm them.
-- **Is Lady Ravenmere Lord Ravenmere's wife?** Inferred, not given.
-- **All-dwarf party: coincidence or the point?** How far do the two campaigns (Shune) touch?
-- **Post title** "Inheritance Episode 1" is flat against `voice.md`.
+- The homepage schema description says "tips, and vlogs" before either exists on the site. Fine if December delivers; trim it otherwise.
 - Session-accurate rosters once someone levels up (per-post overrides?).
-- `/llms.txt` link, and a nav link for `/characters/`, `/hobby/`, and `/series/`. Declined 07-27; maybe worth one look now that guides has Mausritter too.
+- `/llms.txt` link, and a nav link for `/characters/` and `/series/`. Declined 07-27.

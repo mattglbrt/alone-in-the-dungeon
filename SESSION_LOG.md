@@ -4,6 +4,39 @@ Append-only. **Newest entry first.**
 
 ---
 
+## 2026-11-17 — Scope widened in the site copy; Inheritance removed; structure work deferred to December
+
+This session worked through the orchestrator's 11-17 `HANDOFF.md` (from the MDG Growth strategy session). Two commits: `c4be894` (scope copy) and `c52808f` (Inheritance removal), pushed with this wrap.
+
+### Scope audit and copy pass (`c4be894`)
+- **Matt's correction to the handoff's wording:** "solo rgps are ttrpgs". The scope reads as solo play first (wargames and RPGs), widening to TTRPGs at large and the hobby. Copy never lists "solo RPGs" and "TTRPGs" as separate categories.
+- **Philosophy and the occult:** nothing in the site description, categories, nav or type labels framed them as topics. The only hits are inside posts (the tarot guide and its follow-ups), which is the "woven in" case. Nothing changed.
+- **Metadata widened** to "solo wargames, tabletop RPGs, and the hobby": the default meta description (`BaseLayout.astro`), the homepage schema description (`index.astro`, which also now ends "tips, and vlogs"), the RSS description, `package.json`, and the `/llms.txt` and `/llms-full.txt` intros.
+- **About page** (`src/pages/about.astro`), two lines Matt approved in principle and Claude worded: "Solo play comes first, but you will also find TTRPGs in general, quick hobby tips, and vlogs here." and "I am also working on a cool ass hobby and game site called The Hobbinomicon." (Matt's own phrase; hobby tips stay on both sites, "a balance between the two"). Matt kept the self-transformation sentence.
+- **Footer byline:** "A Matt Gilbert joint." already links to mattglbrt.com. Matt: it "can stay". The homepage tagline was left as is.
+
+### Inheritance removed (`c52808f`)
+Matt: "lets remove inheritance from the site". The series entry and the episode 1 draft are deleted. `/series/inheritance/` 301s to `/series/` (the page was live). **Borb's sheet is kept**, detached from the series, because the Borb solo campaign is still coming, just not as Inheritance (Matt: "it is coming its just not going ot be inheritance"). For the same reason the "Borb isn't done" section of the Shadowdark essay stays as written.
+
+### Tried and reverted
+Matt asked to remove the Garreth Vale, Triste and Eloryn Vale Convergence stories, then reversed it before commit ("i dont want to lose the work"). Everything was restored; nothing reached history. If they should come off the public site later, `draft: true` hides them without deleting.
+
+### Decisions on structure
+- **KDM videos live under Live Plays** as ordinary posts. No separate section, no schema groundwork (Matt declined it).
+- **Vlogs section and Hobby in the top nav: wait until the videos exist** (Matt).
+- **KDM channel** is renamed: "Alone in the Dungeon: KDM", https://www.youtube.com/channel/UC8605grw5cw-xlThSBW304g.
+- **Subscriber counts:** 0 on both channels, no videos yet.
+
+### Handoff items
+Addressed: scope, philosophy/occult check, byline, KDM channel name and URL, subscriber counts. Carried into STATUS: the Substack subscribe button (needs the publication URL), the December production calendar, the undecided solo-to-general mix. The handoff is folded into STATUS and deleted.
+
+### Still open
+- The strategy docs still need the subscriber counts and the channel rename copied in (for the orchestrator; `../strategy/brands/alone-in-the-dungeon.md` is outside this repo).
+- There's still no `mdggrowth/PROJECTS.md` board, so no row was updated.
+- Planner: "Pick up the 9 waiting handoffs" (Tue) is one of nine done, and "MDG baselines" (Thu) has the two subscriber counts but not hobbinomicon.com visitors. Both left unchecked.
+
+---
+
 ## 2026-11-01 — Mac migration: Node via fnm, deps installed, build + dev smoke-tested
 
 This was the first session on the Mac. It worked through the orchestrator's 10-31 `HANDOFF.md`. No site code changed.
